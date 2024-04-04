@@ -3,7 +3,7 @@ import { VscSend } from "react-icons/vsc";
 
 const Footer = () => {
   return (
-    <footer className=" bg-black fixed bottom-0 w-full z-10">
+    <footer className=" bg-black ">
       <div className=" container flex flex-wrap justify-center mx-auto py-20 text-white md:justify-between  ">
         <div className="flex flex-col justify-between items-start">
           <h1 className="text-xl font-semibold ">Exclusive</h1>

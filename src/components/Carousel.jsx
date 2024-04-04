@@ -23,13 +23,13 @@ const Carousel = ({ slides }) => {
   //   }, [current]);
 
   return (
-    <div className="container mt-20 overflow-hidden relative md:h-[450px]">
+    <section className="relative  flex  justify-center items-center w-full max-xl:padding-x pt-12">
       <div
-        className="flex transition ease-out duration-300"
+        className="flex transition overflow-hidden w-[800px] ease-out duration-300"
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {slides.map((item) => (
-          <img key={item.id} src={item.image} alt={item.alt || ""} />
+          <img key={item.id} src={item.image} alt={item.alt || ""} width={800} eight={45}/>
         ))}
       </div>
       <div className="absolute top-0 w-full h-full flex justify-between items-center text-white px-4 md:px-10 text-2xl md:text-3xl   ">
@@ -53,7 +53,7 @@ const Carousel = ({ slides }) => {
           ></div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

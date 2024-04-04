@@ -25,13 +25,16 @@ const HomePage = () => {
   },[])
 
   return (
-    <div className="container mt-32 mx-auto md:mt-28 mb-24 z-50">
-      {/* Carousel container */}
-      <div className="w-[95%] mx-auto">
+    <main className="relative">
+      <hr />
+    
+      {/* <section className="padding bg-black text-white">
         <Carousel slides={slides} />
-      </div>
+      </section> */}
+      <section className="max-xl:mx-8 max-lg:mx-2">
       <ProductCard products={products} />
-    </div>
+      </section>
+    </main>
   );
 };
 
