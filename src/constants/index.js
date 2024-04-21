@@ -1,6 +1,63 @@
+import {
+  facebook,
+  instagram,
+  twitter,
+  gitHub,
+  Visa,
+  MasterCard,
+  PayPal,
+  ApplePay,
+  Gpay,
+} from "../assets/icons";
+
 export const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Contact", path: "/contact" },
-    { name: "About", path: "/about" },
-    { name: "Categories", path: "/categories" },
-  ];
+  { name: "Shop", path: "/" },
+  { name: "On Sale", path: "/contact" },
+  { name: "New Arrivals", path: "/about" },
+  { name: "Brands", path: "/categories" },
+];
+
+export const socialMedia = [
+  { src: twitter, alt: "twitter logo" },
+  { src: facebook, alt: "facebook logo" },
+  { src: instagram, alt: "instagram logo" },
+  { src: gitHub, alt: "github logo" },
+];
+
+export const footerLinks = [
+  {
+    title: "COMPANY",
+    links: [
+      { name: "About", link: "/" },
+      { name: "Features", link: "/" },
+      { name: "Works", link: "/" },
+      { name: "Career", link: "/" },
+    ],
+  },
+  {
+    title: "HELP",
+    links: [
+      { name: "Customer Support", link: "/" },
+      { name: "Delivery Details", link: "/" },
+      { name: "Terms & Conditions", link: "/" },
+      { name: "Privacy policy", link: "/" },
+    ],
+  },
+  {
+    title: "FAQ",
+    links: [
+      { name: "Account", link: "/account" },
+      { name: "Manage deliveries", link: "/" },
+      { name: "Orders", link: "/orders" },
+      { name: "Payments", link: "/" },
+    ],
+  },
+];
+
+export const paymentMethods = [
+  { src: Visa, alt: "visa logo" },
+  { src: MasterCard, alt: "master logo" },
+  { src: PayPal, alt: "paypal logo" },
+  { src: ApplePay, alt: "apple logo" },
+  { src: Gpay, alt: "gpay logo" },
+];

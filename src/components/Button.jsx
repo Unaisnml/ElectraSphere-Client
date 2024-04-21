@@ -1,8 +1,12 @@
-import React from "react";
-
-const Button = ({ label, icon }) => {
+const Button = ({ label, onClick, stockQuantity }) => {
   return (
-    <button className="flex items-center justify-center text-center bg-red-600 md:py-3  md:px-2 px-1 text-white md:font-semibold md:text-xl tex-sm rounded-md md:min-w-[120px]">
+    <button
+      onClick={onClick}
+      className={`flex items-center justify-center text-center bg-black md:py-2 py-2 md:px-5 px-28 text-white font-[Poppins] md:font-normal md:text-lg text-sm rounded-full md:min-w-[120px] ${
+        stockQuantity === 0 ? "cursor-not-allowed" : ""
+      }`}
+      disabled={stockQuantity === 0}
+    >
       {label}
     </button>
   );

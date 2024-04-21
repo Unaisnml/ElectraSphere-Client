@@ -9,6 +9,8 @@
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
+  font-family:Poppins, Arial, Helvetica, sans-serif;
+  
 }
 
 @layer components {
@@ -25,6 +27,14 @@
 
   .count-div {
     @apply absolute right-3  top-[-3px] w-4 h-4 bg-pink-700 font-semibold text-white text-sm flex  justify-center items-center rounded-full;
+  }
+
+  .zoomLensStyle{
+    position: absolute;
+    background-color: 'rgba(0, 0, 0, 0.5)';
+    border: '1px solid rgba(255, 255, 255, 0.7)';
+    width: '200px';
+    height: '200px';
   }
 
   .padding-x {
@@ -50,7 +60,6 @@
   .padding-b {
     @apply sm:pb-24 pb-12;
   }
-
   .info-text {
     @apply font-montserrat text-slate-gray text-lg leading-7;
   }

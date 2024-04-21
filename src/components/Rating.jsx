@@ -3,7 +3,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const Rating = ({ value, text }) => {
   console.log("text", text);
-  console.log("value:", value);
+  console.log("value:", typeof(value));
   return (
     <div className="cursor-pointer flex items-center  max-lg:flex-col max-lg:items-start space-x-2">
       <div className="cursor-pointer flex items-center space-x-1 text-yellow-400">
