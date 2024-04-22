@@ -10,6 +10,7 @@ import Loader from "../components/Loader";
 import CountButton from "../components/CountButton";
 import { addToCart } from "../slices/cartSlice";
 
+
 const ProductPage = () => {
   const { id: productId } = useParams();
   const dispatch = useDispatch();
@@ -59,28 +60,28 @@ const ProductPage = () => {
       ) : error ? (
         <div>{error.error}</div>
       ) : (
-        <div className=" flex  md:flex-row flex-col items-center  gap-6  py-12 ">
+        <div className=" flex  md:flex-row flex-col items-center  gap-6  py-12 mx-auto">
           <div className="w-1/2 h-auto  flex  space-y-4 items-center justify-center gap-8 overflow-hidden ">
-            <div className="md:grid grid-cols-1  gap-2 overflow-hidden justify-center min-w-20  hidden">
+            <div className="md:grid grid-cols-1  gap-3 overflow-hidden justify-center min-w-20  hidden">
               <img
                 src={product.image}
                 alt=""
-                className="md:max-w-[100px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
+                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
               />
               <img
                 src={product.image}
                 alt=""
-                className="md:max-w-[100px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
+                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
               />
               <img
                 src={product.image}
                 alt=""
-                className="md:max-w-[100px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
+                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
               />
               <img
                 src={product.image}
                 alt=""
-                className="md:max-w-[100px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
+                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
               />
             </div>
 
@@ -90,7 +91,7 @@ const ProductPage = () => {
               className="md:max-w-[70%] max-h-[22rem] object-contain"
             />
           </div>
-          <div className=" flex flex-col justify-start py-6">
+          <div className=" flex flex-col justify-start py-6 px-6">
             <h3 className="md:text-3xl text-xl  mb-2">{product.name}</h3>
             <div className="flex items-center justify-between leading-3 space-x-3">
               <Rating
@@ -104,7 +105,7 @@ const ProductPage = () => {
               )}
             </div>
             <h2 className="text-xl font-semibold my-4 ">₹ {product.price}</h2>
-            <p className="mt-2 md:leading-5 md:max-w-xl max-w-48 text-sm font-normal md:w-full ">
+            <p className="mt-2 md:leading-5 md:max-w-xl max-w-full  text-sm font-normal md:w-full ">
               {product.description}
             </p>
             <hr className=" border-gray-700 h-1 w-full my-2 " />
@@ -125,34 +126,10 @@ const ProductPage = () => {
                 stockQuantity={product.stockQuantity}
                 count={product.count}
               />
-              <button className="py-1 md:px-2 px-2 border md:text-3xl text-xl hover:bg-red-600 rounded-xl hover:border-red-600 text-black hover:text-white font-semibold border-black border-solid">
+              <button className="py-1  px-2 border md:text-3xl text-xl hover:bg-black rounded-xl hover:border-black text-black hover:text-white font-semibold border-black border-solid">
                 <HiOutlineHeart />
               </button>
             </div>
-
-            {/* <div className="mt-4 flex flex-col border border-gray-600 rounded-sm">
-              <div className="flex">
-                <div className="text-xl items-center justify-center  my-4 mx-2">
-                  <CiDeliveryTruck />
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="text-sm font-semibold">Free Delivery</h4>
-                  <p className="text-xs w-full">
-                    Enter your postal code for Delivery Availability
-                  </p>
-                </div>
-              </div>
-              <hr className=" border-gray-600 h-0.5 w-full" />
-              <div className="flex">
-                <div className="text-xl  items-center justify-center  my-2 mx-2">
-                  <FaRotate />
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="text-sm font-semibold">Return Delivery</h4>
-                  <p className="text-xs w-full">10 Days Return</p>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       )}

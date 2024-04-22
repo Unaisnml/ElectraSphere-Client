@@ -4,7 +4,6 @@ import Rating from "./Rating";
 import Button from "./Button";
 import Loader from "./Loader";
 
-
 const ProductCard = ({ products = [], isLoading, error }) => {
   const [showAllProducts, setShowAllProducts] = useState(false);
   const [displayProducts, setDisplayProducts] = useState(products.slice(0, 4));
@@ -18,19 +17,17 @@ const ProductCard = ({ products = [], isLoading, error }) => {
     // Card container
     <section className="flex flex-col  items-center justify-center pb-6 ">
       {isLoading ? (
-        <Loader/>
+        <Loader />
       ) : error ? (
-        <div>
-          {error.error}
-        </div>
+        <div>{error.error}</div>
       ) : (
-        <div className="container mx-auto grid place-items-center mb-10  grid-cols-2 md:grid-cols-4 md:gap-x-40 md:gap-y-2 ">
+        <div className="container mx-auto grid place-items-center mb-10  grid-cols-2 md:grid-cols-4 md:gap-x-40 md:gap-y-4 ">
           {/* Card 1*/}
 
           {displayProducts.map((product) => (
             <div
               key={product._id}
-              className="md:w-[275px] w-full h-[350px] flex  flex-col bg-white justify-between rounded-md max-lg:rounded-none shadow 
+              className="md:w-[275px] w-full h-[350px] flex  flex-col bg-white justify-between  max-lg:rounded-none shadow 
           hover:shadow-xl transition duration-300 ease-in-out p-3 cursor-pointer"
             >
               <div className=" group md:rounded-md  overflow-hidden cursor-pointer h-[200px] relative">
@@ -64,7 +61,7 @@ const ProductCard = ({ products = [], isLoading, error }) => {
           ))}
         </div>
       )}
-    
+
       <Button
         onClick={handleViewAllClick}
         label={showAllProducts ? "View Less" : "View All"}

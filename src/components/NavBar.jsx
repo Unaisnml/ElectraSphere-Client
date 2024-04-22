@@ -16,7 +16,7 @@ const NavBar1 = () => {
 
   return (
     <section>
-      <header className="padding-x md:py-6 py-5 z-30 w-full bg-white">
+      <header className="padding-x md:py-6 py-5 z-30 w-full bg-white shadow">
         <nav className="flex justify-between items-center max-container ">
           <Link to="/">
             <h2 className="text-4xl font-bold flex text-black font-[Poppins] ">
@@ -55,7 +55,7 @@ const NavBar1 = () => {
                 </span>
               )}
             </Link>
-            <Link className="relative">
+            <Link to="/whishlist" className="relative">
               <FaHeart />
               <span className="count-div">5</span>
             </Link>
@@ -99,7 +99,7 @@ const NavBar1 = () => {
           <FaSearch className="absolute left-2 top-2/4 transform -translate-y-2/4 text-gray-300 " />
         </div>
       </header>
-      <hr className="w-full h-0.5 border-gray-400" />
+      {/* <hr className="w-full h-0.5 border-gray-400" /> */}
     </section>
   );
 };

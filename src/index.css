@@ -10,6 +10,7 @@
   box-sizing: border-box;
   scroll-behavior: smooth;
   font-family:Poppins, Arial, Helvetica, sans-serif;
+  /* overflow-y: hidden; */
   
 }
 

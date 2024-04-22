@@ -1,52 +1,102 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import CountButton from "./CountButton";
 import { GoTag } from "react-icons/go";
+import CountButton from "./CountButton";
 import Button from "./Button";
+import { decrementItemCount, incrementItemCount, removeCartItem } from "../slices/cartSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export const Cart = () => {
-  const count = 4;
+export const Cart = ({ cartItems, shippingPrice }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const removeCartItemHandler = async (id) => {
+    dispatch(removeCartItem(id));
+  };
+
+  const handleIncrement = async (itemId) => {
+    dispatch(incrementItemCount({itemId}));
+    console.log("count+1",itemId);
+  };
+
+  const handleDecrement = async(itemId) =>{
+    dispatch(decrementItemCount({itemId}))
+  }
+  // const [newCount, setNewCount] = useState(cartItems.count);
+  const onIncrement = (itemId) => {
+    setItemCounts((prevCounts) => ({
+      ...prevCounts,
+      [itemId]: (prevCounts[itemId] || 0) + 1,
+    }));
+  };
+  const checkoutHandler = () => {
+    navigate("/login ? redirect=/shipping");
+  };
   return (
     // main container
     <section className=" flex md:flex-row flex-col gap-6 mx-auto ">
       {/* Cart items container */}
-      <div className="flex flex-col justify-between md:w-[65%] w-full rounded-lg border p-4 max-h-[11rem]  ">
-        {/* cart items list contaner */}
-        <div className="flex  gap-6 ">
-          <Link>
-            <img
-              src="/airpod.jpg"
-              alt="product-img"
-              className="rounded-lg border md:max-w-[10rem] max-h-[8rem]"
-            />
-          </Link>
 
-          <div className="flex flex-col  justify-center w-full gap-2 ">
-            {/* Container for product name and delete button */}
-            <div className="flex justify-between">
-              <h3 className="text-lg font-semibold ">Product Name</h3>
-              <button className="py-1 px-1 rounded-lg border text-red-600 text-lg">
-                <RiDeleteBin2Line />
-              </button>
-            </div>
-            <p>Size :Large</p>
-            <p>Color :Red</p>
-            {/* Container for Product price and Count button */}
-            <div className="flex justify-between ">
-              <h4 className="text-xl font-bold">Price: ₹ 99.66 </h4>
-              <CountButton count={count} />
+      <div className="flex flex-col justify-between md:w-[65%] w-full rounded-lg border p-4 max-h-  ">
+        {/* cart items list contaner */}
+        {cartItems.map((item) => (
+          <div key={item._id} className="flex  gap-6 p-2 border-b">
+            <Link to={`/products/${item._id}`}>
+              <img
+                src={item.image}
+                alt="product-img"
+                className="rounded-lg  md:max-w-[10rem] max-h-[8rem]"
+              />
+            </Link>
+
+            <div className="flex flex-col  justify-center w-full gap-2 ">
+              {/* Container for product name and delete button */}
+              <div className="flex justify-between">
+                <Link to={`/products/${item._id}`}>
+                  <h3 className="md:text-xl text-sm font-bold ">{item.name}</h3>
+                </Link>
+                <button
+                  className="py-1 px-1 rounded-lg border text-red-600 text-lg"
+                  onClick={() => removeCartItemHandler(item._id)}
+                >
+                  <RiDeleteBin2Line />
+                </button>
+              </div>
+              <p>Size :Large</p>
+              <p>Color :Red</p>
+              {/* Container for Product price and Count button */}
+              <div className="flex justify-between items-center ">
+                <h4 className="md:text-xl text-sm font-bold">{item.price}</h4>
+                <CountButton
+                  count={item.count}
+                  stockQuantity={item.stockQuantity}
+                  onIncrement={() => handleIncrement(item._id)}
+                  onDecrement={()=> handleDecrement(item._id)}
+                  // onDecrement={onDecrement}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        ))}
       </div>
 
       {/* Cart total container*/}
       <div className="flex  flex-col rounded-lg border p-4 gap-4 text-base ">
         <h4 className="my-2 text-lg font-semibold">Cart total</h4>
-        <div className="flex justify-between space-x-16 md:space-x-44">
-          <p>Subtotal</p>
-          <p>$300</p>
+        <div className="flex justify-between space-x-16 md:space-x-">
+          <p>
+            Subtotal ({cartItems.reduce((acc, item) => acc + item.count, 0)})
+            items
+          </p>
+          {/* <p key={item._id}>₹ {cartItems.reduce((acc, item)=> acc + (item.count * item.price))}</p> */}
+          <p key="sub-total">
+            ₹{" "}
+            {cartItems
+              .reduce((acc, item) => acc + item.count * item.price, 0)
+              .toFixed(2)}
+          </p>
         </div>
         <div className="flex justify-between space-x-16 md:space-x-44">
           <p>Discount</p>
@@ -54,11 +104,11 @@ export const Cart = () => {
         </div>
         <div className="flex justify-between space-x-8">
           <p>Delivery Charge</p>
-          <p>Free</p>
+          <p>{shippingPrice}</p>
         </div>
         <div className="flex justify-between space-x-8">
           <p>Total</p>
-          <p>$3000</p>
+          <p>₹ </p>
         </div>
         <div className="flex justify-between space-x-4 relative">
           <input
@@ -72,7 +122,7 @@ export const Cart = () => {
           </button>
         </div>
 
-        <Button label=" Proceed to payment" />
+        <Button label=" Proceed to payment" onClick={checkoutHandler} />
       </div>
     </section>
   );
