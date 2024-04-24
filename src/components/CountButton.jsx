@@ -4,7 +4,7 @@ const CountButton = ({ count, onIncrement, onDecrement, stockQuantity }) => {
       <button
         onClick={onDecrement}
         className={`md:px-3 px-2 rounded-full text-xl font-bold ${
-          count <= 1 ? "cursor-not-allowed" : ""
+          count <= 1 ? "cursor-not-allowed opacity-50" : ""
         }`}
         disabled={count <= 1}
       >
@@ -13,8 +13,11 @@ const CountButton = ({ count, onIncrement, onDecrement, stockQuantity }) => {
       <span className="px-1 ">{count}</span>
       <button
         onClick={onIncrement}
-        className="md:px-3 px-2 rounded-full text-xl font-bold"
-        disabled={count >= stockQuantity }
+        // className="md:px-3 px-2 rounded-full text-xl font-bold"
+        className={`md:px-3 px-2 rounded-full text-xl font-bold ${
+          count >= stockQuantity ? "cursor-not-allowed opacity-50" : ""
+        }`}
+        disabled={count >= stockQuantity}
       >
         +
       </button>

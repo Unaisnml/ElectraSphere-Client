@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-// import axios from "axios";
 import Rating from "../components/Rating";
 import Button from "../components/Button";
 import { HiOutlineHeart } from "react-icons/hi2";
@@ -9,7 +8,7 @@ import { useGetProductDetailsQuery } from "../slices/productApiSlice";
 import Loader from "../components/Loader";
 import CountButton from "../components/CountButton";
 import { addToCart } from "../slices/cartSlice";
-
+import Swal from "sweetalert2";
 
 const ProductPage = () => {
   const { id: productId } = useParams();
@@ -23,7 +22,7 @@ const ProductPage = () => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, count }));
-    // console.log("Product price from add to cart",typeof(product.price) ,typeof(count));
+    Swal.fire("Item Added to Cart.");
   };
   console.log("Got product.........", product);
 
@@ -119,6 +118,7 @@ const ProductPage = () => {
                 count={count}
                 onIncrement={incrementCount}
                 onDecrement={decrementCount}
+                stockQuantity={product.stockQuantity}
               />
               <Button
                 label="Add to Cart"
@@ -130,6 +130,13 @@ const ProductPage = () => {
                 <HiOutlineHeart />
               </button>
             </div>
+            {product.stockQuantity <= 5 ? (
+              <span className="my-4 opacity-50">
+                Only {product.stockQuantity} items available!
+              </span>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       )}

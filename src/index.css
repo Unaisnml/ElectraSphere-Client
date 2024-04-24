@@ -30,6 +30,12 @@
     @apply absolute right-3  top-[-3px] w-4 h-4 bg-pink-700 font-semibold text-white text-sm flex  justify-center items-center rounded-full;
   }
 
+  .cart-list {
+    /* Additional styles for the cart list */
+    border: 1px solid #ddd;
+    overflow-y: auto; /* Enable scrolling if needed */
+  }
+
   .zoomLensStyle{
     position: absolute;
     background-color: 'rgba(0, 0, 0, 0.5)';

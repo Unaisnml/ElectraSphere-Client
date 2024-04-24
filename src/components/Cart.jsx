@@ -5,41 +5,56 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import { GoTag } from "react-icons/go";
 import CountButton from "./CountButton";
 import Button from "./Button";
-import { decrementItemCount, incrementItemCount, removeCartItem } from "../slices/cartSlice";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import {
+  decrementItemCount,
+  incrementItemCount,
+  removeCartItem,
+} from "../slices/cartSlice";
+// import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 export const Cart = ({ cartItems, shippingPrice }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const removeCartItemHandler = async (id) => {
-    dispatch(removeCartItem(id));
+    const confirmation = await Swal.fire({
+      width: "400px",
+      padding: "15px",
+      title: "Are you sure!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (confirmation.isConfirmed) {
+      dispatch(removeCartItem(id));
+      Swal.fire("Deleted!", "Your item has been deleted.", "success");
+    }
   };
 
   const handleIncrement = async (itemId) => {
-    dispatch(incrementItemCount({itemId}));
-    console.log("count+1",itemId);
+    dispatch(incrementItemCount({ itemId }));
   };
 
-  const handleDecrement = async(itemId) =>{
-    dispatch(decrementItemCount({itemId}))
-  }
-  // const [newCount, setNewCount] = useState(cartItems.count);
-  const onIncrement = (itemId) => {
-    setItemCounts((prevCounts) => ({
-      ...prevCounts,
-      [itemId]: (prevCounts[itemId] || 0) + 1,
-    }));
+  const handleDecrement = async (itemId) => {
+    dispatch(decrementItemCount({ itemId }));
   };
+
   const checkoutHandler = () => {
     navigate("/login ? redirect=/shipping");
   };
+
   return (
     // main container
-    <section className=" flex md:flex-row flex-col gap-6 mx-auto ">
+    <section className=" flex md:flex-row flex-col gap-6 mx-auto my-10 ">
       {/* Cart items container */}
 
-      <div className="flex flex-col justify-between md:w-[65%] w-full rounded-lg border p-4 max-h-  ">
+      <div className="flex flex-col justify-between md:w-[65%] w-full h-full rounded-lg border p-6  ">
         {/* cart items list contaner */}
         {cartItems.map((item) => (
           <div key={item._id} className="flex  gap-6 p-2 border-b">
@@ -47,7 +62,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
               <img
                 src={item.image}
                 alt="product-img"
-                className="rounded-lg  md:max-w-[10rem] max-h-[8rem]"
+                className="rounded-lg  md:max-w-[8rem] max-h-[8rem]"
               />
             </Link>
 
@@ -68,14 +83,15 @@ export const Cart = ({ cartItems, shippingPrice }) => {
               <p>Color :Red</p>
               {/* Container for Product price and Count button */}
               <div className="flex justify-between items-center ">
-                <h4 className="md:text-xl text-sm font-bold">{item.price}</h4>
+                <h4 className="md:text-xl text-sm font-bold">₹ {item.price}</h4>
+
                 <CountButton
                   count={item.count}
                   stockQuantity={item.stockQuantity}
                   onIncrement={() => handleIncrement(item._id)}
-                  onDecrement={()=> handleDecrement(item._id)}
-                  // onDecrement={onDecrement}
+                  onDecrement={() => handleDecrement(item._id)}
                 />
+                <span>₹ {Math.round(item.price * item.count)}</span>
               </div>
             </div>
           </div>
@@ -83,7 +99,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
       </div>
 
       {/* Cart total container*/}
-      <div className="flex  flex-col rounded-lg border p-4 gap-4 text-base ">
+      <div className="flex  flex-col rounded-lg border p-4 gap-4 text-base h-full">
         <h4 className="my-2 text-lg font-semibold">Cart total</h4>
         <div className="flex justify-between space-x-16 md:space-x-">
           <p>
