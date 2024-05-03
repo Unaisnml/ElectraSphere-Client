@@ -54,7 +54,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
     <section className=" flex md:flex-row flex-col gap-6 mx-auto my-10 ">
       {/* Cart items container */}
 
-      <div className="flex flex-col justify-between md:w-[65%] w-full h-full rounded-lg border p-6  ">
+      <div className="flex flex-col justify-between md:w-[65%] w-full h-full rounded-lg border p-6 gap-4 ">
         {/* cart items list contaner */}
         {cartItems.map((item) => (
           <div key={item._id} className="flex  gap-6 p-2 border-b">
@@ -82,15 +82,17 @@ export const Cart = ({ cartItems, shippingPrice }) => {
               <p>Size :Large</p>
               <p>Color :Red</p>
               {/* Container for Product price and Count button */}
-              <div className="flex justify-between items-center ">
+              <div className="flex md:flex-row  flex-col justify-between gap-4">
                 <h4 className="md:text-xl text-sm font-bold">₹ {item.price}</h4>
+              <div className="w-1/2 md:w-fit">
 
                 <CountButton
                   count={item.count}
                   stockQuantity={item.stockQuantity}
                   onIncrement={() => handleIncrement(item._id)}
                   onDecrement={() => handleDecrement(item._id)}
-                />
+                  />
+                  </div>
                 <span>₹ {Math.round(item.price * item.count)}</span>
               </div>
             </div>

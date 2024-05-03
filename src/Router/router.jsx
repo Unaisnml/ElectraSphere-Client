@@ -4,6 +4,8 @@ import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
 import WhishList from "../pages/WhishList";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +16,8 @@ const router = createBrowserRouter([
       { path: "/products/:id", element: <ProductPage /> },
       { path: "/cart", element: <CartPage /> },
       { path: "/whishlist", element: <WhishList /> },
-      // { path: "/login", element: <LoginPage /> },
+      { path: "/login", element: <LoginPage /> },
+      { path: "/register", element: <RegisterPage /> },
 
     ],
   },
