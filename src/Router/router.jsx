@@ -6,6 +6,7 @@ import CartPage from "../pages/CartPage";
 import WhishList from "../pages/WhishList";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import ShippingPage from "../pages/ShippingPage";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
       { path: "/whishlist", element: <WhishList /> },
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
-
+      { path: "/shipping", element: <ShippingPage /> },
     ],
   },
 ]);
