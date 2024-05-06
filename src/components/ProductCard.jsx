@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import Button from "./Button";
-import Loader from "./Loader";
+import {Loader} from "./Loader";
 
 const ProductCard = ({ products = [], isLoading, error }) => {
   const [showAllProducts, setShowAllProducts] = useState(false);

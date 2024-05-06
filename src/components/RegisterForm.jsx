@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "./Loader";
+import {Loader} from "./Loader";
 import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
@@ -106,7 +106,7 @@ const RegisterForm = (initialValues) => {
               name="password"
               placeholder="Password"
               className="input  focus:outline-none w-full bg-gray-200 text-sm px-4 py-2"
-              autocomplete="current-password"
+              // autocomplete="current-password"
             />
             <ErrorMessage
               name="password"
@@ -126,7 +126,7 @@ const RegisterForm = (initialValues) => {
               name="confirmPassword"
               placeholder="Confirm your password"
               className="input  focus:outline-none w-full bg-gray-200 text-sm px-4 py-2"
-              autocomplete="current-password"
+              // autocomplete="current-password"
             />
             <ErrorMessage
               name="confirmPassword"

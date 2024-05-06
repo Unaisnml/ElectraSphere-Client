@@ -46,7 +46,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
   };
 
   const checkoutHandler = () => {
-    navigate("/login ? redirect=/shipping");
+    navigate("/login?redirect=/shipping");
   };
 
   return (

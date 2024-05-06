@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Loader from "./Loader";
+import {Loader} from "./Loader";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
@@ -81,7 +81,7 @@ const LoginForm = (initialValues) => {
               name="password"
               placeholder="Password"
               className="input  focus:outline-none w-full bg-gray-200 text-sm px-4 py-2"
-              autocomplete="current-password"
+              // autocomplete="current-password"
             />
             <ErrorMessage
               name="password"

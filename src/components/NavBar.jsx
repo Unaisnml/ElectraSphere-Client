@@ -75,7 +75,8 @@ const NavBar1 = () => {
               <FaShoppingCart />
               {cartItems.length > 0 && (
                 <span className="count-div w-24">
-                  {cartItems.reduce((a, c) => a + c.count, 0)}
+                  {/* {cartItems.reduce((a, c) => a + c.count, 0)} */}
+                  {cartItems.length}
                 </span>
               )}
             </Link>

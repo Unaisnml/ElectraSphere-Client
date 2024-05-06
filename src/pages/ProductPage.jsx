@@ -5,7 +5,7 @@ import Rating from "../components/Rating";
 import Button from "../components/Button";
 import { HiOutlineHeart } from "react-icons/hi2";
 import { useGetProductDetailsQuery } from "../slices/productApiSlice";
-import Loader from "../components/Loader";
+import {Loader} from "../components/Loader";
 import CountButton from "../components/CountButton";
 import { addToCart } from "../slices/cartSlice";
 import Swal from "sweetalert2";
