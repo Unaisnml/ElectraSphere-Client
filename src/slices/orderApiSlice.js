@@ -8,7 +8,11 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         url: ORDERS_URL,
         method: "POST",
         body: { ...order },
+       
       }),
+      // onQueryStarted: () => {
+      //   console.log("Inside createOrder");
+      // },
     }),
   }),
 });

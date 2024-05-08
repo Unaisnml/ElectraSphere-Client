@@ -9,7 +9,8 @@ import Button from "./Button";
 
 const OrderSummary = () => {
   const cart = useSelector((state) => state.cart);
-  // const userInfo = useSelector((state) => state.auth);
+
+  // const {userInfo} = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
@@ -24,22 +25,20 @@ const OrderSummary = () => {
 
   const placeOrderHandler = async () => {
     try {
-      
-      const order = await createOrder({
+      const res = await createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
-        itemPrice: cart.itemPrice,
+        itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-       
       }).unwrap();
       dispatch(clearCartItems());
-      console.log("Order response", order);
-      navigate(`/order/${order._id}`);
-    } catch (error) {
-      toast.error(error);
+      console.log("Order response", res);
+      navigate(`/order/${res._id}`);
+    } catch (err) {
+      toast.error(err);
     }
   };
 
@@ -74,7 +73,7 @@ const OrderSummary = () => {
               {cart.cartItems.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between my-4"
+                  className="flex items-center justify-between my-4 shadow p-2"
                 >
                   <div className="flex items-center justify-center gap-4 ">
                     <img
@@ -89,7 +88,6 @@ const OrderSummary = () => {
                   </p>
                 </div>
               ))}
-              <hr />
             </div>
           )}
         </div>

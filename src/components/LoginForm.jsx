@@ -33,14 +33,11 @@ const LoginForm = (initialValues) => {
   });
 
   const onSubmitHandler = async (values, { setSubmitting }) => {
-    console.log(values, "Submit");
     setSubmitting(true);
     const { email, password } = values;
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      console.log("Hellloooooo");
-      // console.log(userInfo.email);
+      dispatch(setCredentials({ ...res, email }));          //new code
       navigate(redirect);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
