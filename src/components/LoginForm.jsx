@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {Loader} from "./Loader";
+import { Loader } from "./Loader";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
@@ -14,7 +14,6 @@ const LoginForm = (initialValues) => {
   const [login, { isLoading }] = useLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
-
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
@@ -37,7 +36,9 @@ const LoginForm = (initialValues) => {
     const { email, password } = values;
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res, email }));          //new code
+      console.log("response", res);
+      dispatch(setCredentials({ ...res })); //new code
+
       navigate(redirect);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
