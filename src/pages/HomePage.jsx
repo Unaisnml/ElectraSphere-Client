@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import Hero from "../components/Hero";
-// import axios from "axios";
 import CompanyLogos from "../components/CompanyLogos";
 import Heading from "../components/Heading";
 import DressStyle from "../components/DressStyle";
 import ReviewCard from "../components/ReviewCard";
 import Line from "../components/Line";
 import { useGetProductsQuery } from "../slices/productApiSlice";
+import { useSelector } from "react-redux";
+import AdminHome from "./Admin/AdminHome";
 
 const HomePage = () => {
+  const { userInfo } = useSelector((state) => state.auth);
   const { data: products, isLoading, error } = useGetProductsQuery();
   return (
-    <main className="relative">
+    <main className="relative mt-10">
+      {
+        !userInfo?.isAdmin && (
+          <>
       <section>
         <Hero />
       </section>
@@ -23,8 +28,7 @@ const HomePage = () => {
         <Heading label="NEW ARRIVALS" />
       </section>
       <section>
-        
-        {products && ( 
+        {products && (
           <ProductCard
             products={products}
             isLoading={isLoading}
@@ -53,6 +57,16 @@ const HomePage = () => {
       <section className="mb-32">
         <ReviewCard />
       </section>
+    </>
+        )
+      }
+      {
+        userInfo?.isAdmin && (
+          <>
+          <AdminHome/>
+          </>
+        )
+      }
     </main>
   );
 };

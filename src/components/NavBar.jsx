@@ -7,6 +7,7 @@ import { CgProfile } from "react-icons/cg";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
+import AdminNav from "./AdminNav";
 
 const NavBar1 = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -39,29 +40,37 @@ const NavBar1 = () => {
     }
   };
   return (
-    <section>
+    <section className="fixed z-50 top-0 right-0 left-0">
+      {userInfo?.isAdmin && (
+        <div className="fixed md:w-1/5 z-40 left-0 top-0 bottom-0 border-r bg-white flex flex-col items-center">
+          <AdminNav />
+        </div>
+      )}
       <header className="padding-x md:py-6 py-5 z-30 w-full bg-white shadow">
         <nav className="flex justify-between items-center max-container ">
           <Link to="/">
-            <h2 className="text-4xl font-bold flex text-black font-[Poppins] ">
+            <h2 className="md:text-4xl text-2xl font-bold flex text-black ">
               SHOP.CO
             </h2>
           </Link>
-          <ul className="flex felx-1 justify-center items-center gap-16 md:gap-8   max-lg:hidden">
-            {navItems.map(({ name, path }) => (
-              <li
-                key={path}
-                className="text-lg font-[Poppins] font-semibold hover:text-gray-600"
-              >
-                <NavLink
-                  to={path}
-                  className={({ isActive }) => (isActive ? "active" : "")}
+          {!userInfo?.isAdmin && (
+            <ul className="flex felx-1 justify-center items-center gap-16 md:gap-8   max-lg:hidden">
+              {navItems.map(({ name, path }) => (
+                <li
+                  key={path}
+                  className="text-lg font-[Poppins] font-semibold hover:text-gray-600"
                 >
-                  {name}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
+                  <NavLink
+                    to={path}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    {name}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          )}
+
           <div className="flex justify-center items-center gap-10 md:gap-6 text-2xl text-black max-lg:gap-3">
             <div className="relative max-lg:hidden ">
               <input
@@ -71,23 +80,25 @@ const NavBar1 = () => {
               />
               <FaSearch className="absolute  left-2 top-1/2 text-base transform -translate-y-1/2 text-gray-300 " />
             </div>
-            <Link to="/cart" className="relative">
-              <FaShoppingCart />
-              {cartItems.length > 0 && (
-                <span className="count-div w-24">
-                  {/* {cartItems.reduce((a, c) => a + c.count, 0)} */}
-                  {cartItems.length}
-                </span>
-              )}
-            </Link>
-            <Link to="/whishlist" className="relative">
-              <FaHeart />
-              <span className="count-div">5</span>
-            </Link>
-            {/* <Link to='/login' className="flex items-center justify-center text-lg gap-1">
-            <CgProfile className="cursor-pointer" />
-            Login
-            </Link> */}
+
+            {!userInfo?.isAdmin && (
+              <>
+                <Link to="/cart" className="relative">
+                  <FaShoppingCart />
+                  {cartItems.length > 0 && (
+                    <span className="count-div w-24">
+                      {/* {cartItems.reduce((a, c) => a + c.count, 0)} */}
+                      {cartItems.length}
+                    </span>
+                  )}
+                </Link>
+                <Link to="/whishlist" className="relative">
+                  <FaHeart />
+                  <span className="count-div"></span>
+                </Link>
+              </>
+            )}
+
             {/* ---------------------------------------------------------------------------------- */}
             <div className="relative inline-block text-left">
               <div>

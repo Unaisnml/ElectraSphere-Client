@@ -52,6 +52,42 @@ const OrderDetails = () => {
     }
   }, [order, paypal, paypalDispatch, paypalLoading, payPalError]);
 
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      try {
+        await payOrder({ orderId, details });
+        refetch();
+        toast.success("Payment Success");
+      } catch (error) {
+        toast.error(err?.data?.message || err.message);
+      }
+    });
+  }
+  async function onApproveTest() {
+    await payOrder({ orderId, details: { payer: {} } });
+    refetch();
+    toast.success("Payment Success");
+  }
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: order.totalPrice,
+            },
+          },
+        ],
+      })
+      .then((orderId) => {
+        return orderId;
+      });
+  }
+
+  function onError(err) {
+    toast.error(err.message);
+  }
+
   return isLoading ? (
     Loader
   ) : error ? (
@@ -151,7 +187,29 @@ const OrderDetails = () => {
           <p>Grand Total</p>
           <p>₹ {order.totalPrice}</p>
         </div>
-        <PayPalButtons />
+        {!order.isPaid && (
+          <div>
+            {isLoading ? (
+              <Loader />
+            ) : isPending ? (
+              <Loader />
+            ) : (
+              <div>
+                <button
+                  onClick={onApproveTest}
+                  className="bg-blue-200 mb-2 py-2 px-4 rounded-md"
+                >
+                  Test button
+                </button>
+                <PayPalButtons
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+                  onError={onError}
+                />
+              </div>
+            )}
+          </div>
+        )}
         {isLoading && <Loader />}
       </div>
     </section>

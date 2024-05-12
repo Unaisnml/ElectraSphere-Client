@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 const ProductPage = () => {
   const { id: productId } = useParams();
   const dispatch = useDispatch();
-  // const navigate = useNavigate()
   const {
     data: product,
     isLoading,
@@ -53,7 +52,7 @@ const ProductPage = () => {
   // }, [productId]);
 
   return (
-    <section className="container mx-auto">
+    <section className="container mx-auto mt-20">
       {isLoading ? (
         <Loader />
       ) : error ? (

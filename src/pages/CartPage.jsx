@@ -9,7 +9,7 @@ const CartPage = () => {
   const shippingPrice = useSelector((state) => state.cart.shippingPrice);
   const { cartItems } = cart;
   return (
-    <section className="container mx-auto my-4 md:my-10 h-auto max-w-[85%] ">
+    <section className="container mx-auto my-4 md:mb-10 h-auto max-w-[85%] mt-28 ">
       <h2 className="my-3 container text-lg font-semibold  ">Your Cart</h2>
       {cartItems.length === 0 ? (
         <EmptyState />

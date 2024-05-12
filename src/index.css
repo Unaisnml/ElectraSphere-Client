@@ -29,7 +29,9 @@
   .count-div {
     @apply absolute right-3  top-[-3px] w-4 h-4 bg-pink-700 font-semibold text-white text-sm flex  justify-center items-center rounded-full;
   }
-
+ .admin-link {
+  @apply flex items-center justify-center text-lg   py-3 pl-4 pr-8 rounded-lg uppercase font-semibold gap-2
+ }
   .cart-list {
     /* Additional styles for the cart list */
     border: 1px solid #ddd;

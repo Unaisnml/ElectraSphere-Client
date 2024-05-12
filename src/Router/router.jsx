@@ -15,6 +15,11 @@ import ShippingPage from "../pages/ShippingPage";
 import PaymentPage from "../pages/PaymentPage";
 import OrderPage from "../pages/OrderPage";
 import OrderDetailPage from "../pages/OrderDetailPage";
+import UsersList from "../pages/Admin/UsersList";
+import AdminRoute from "../components/AdminRoute";
+import ProductList from "../pages/Admin/ProductList";
+import EditUserForm from "../pages/Admin/EditUser";
+import EditPrductForm from "../pages/Admin/EditProduct";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,9 +33,16 @@ const router = createBrowserRouter(
       {/* Registered users */}
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingPage />} />
-        <Route path="/payment" element={<PaymentPage/>}/>
-        <Route path="/placeorder" element={<OrderPage/>}/>
-        <Route path="/order/:id" element={<OrderDetailPage/>}/>
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/placeorder" element={<OrderPage />} />
+        <Route path="/order/:id" element={<OrderDetailPage />} />
+      </Route>
+      {/* Admin Routes */}
+      <Route path="" element={<AdminRoute />}>
+        <Route path="/admin/users" element={<UsersList />}></Route>
+        <Route path="/admin/products" element={<ProductList />}></Route>
+        <Route path="/admin/user/:id/edit" element={<EditUserForm/>}></Route>
+        <Route path="/admin/products/:id/edit" element={<EditPrductForm/>}></Route>
 
       </Route>
     </Route>

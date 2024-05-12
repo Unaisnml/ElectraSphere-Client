@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Rating from "./Rating";
 import Button from "./Button";
-import {Loader} from "./Loader";
+import { Loader } from "./Loader";
 
 const ProductCard = ({ products = [], isLoading, error }) => {
   const [showAllProducts, setShowAllProducts] = useState(false);
@@ -12,6 +12,9 @@ const ProductCard = ({ products = [], isLoading, error }) => {
     setShowAllProducts(!showAllProducts);
     setDisplayProducts(showAllProducts ? products.slice(0, 4) : products);
   };
+  const filteredProduct = displayProducts.filter(
+    (products) => products.name !== "Sample name"
+  );
 
   return (
     // Card container
@@ -24,7 +27,7 @@ const ProductCard = ({ products = [], isLoading, error }) => {
         <div className="container mx-auto grid place-items-center mb-10  grid-cols-2 md:grid-cols-4 md:gap-x-40 md:gap-y-4 ">
           {/* Card 1*/}
 
-          {displayProducts.map((product) => (
+          {filteredProduct.map((product) => (
             <div
               key={product._id}
               className="md:w-[275px] w-full h-[350px] flex  flex-col bg-white justify-between  max-lg:rounded-none shadow 
