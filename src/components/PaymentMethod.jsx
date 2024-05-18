@@ -32,28 +32,28 @@ const PaymentMethod = () => {
             <div>
               <input
                 type="radio"
-                id="PayPal"
+                id="Razorpay"
                 name="paymentMethod"
-                value="PayPal"
-                checked={paymentMethod === "PayPal"}
-                onChange={() => setPaymentMethod("PayPal")}
+                value="Razorpay"
+                checked={paymentMethod === "Razorpay"}
+                onChange={() => setPaymentMethod("Razorpay")}
                 className="cursor-pointer"
               />
-              <label htmlFor="PayPal" className="ml-2">
-                PayPal or Card
+              <label htmlFor="Razorpay" className="ml-2">
+                Razorpay
               </label>
             </div>
             <div>
               <input
                 type="radio"
-                id="PayPal"
+                id="cod"
                 name="paymentMethod"
                 value="cod"
                 checked={paymentMethod === "cod"}
                 onChange={() => setPaymentMethod("cod")}
                 className="cursor-pointer"
               />
-              <label htmlFor="PayPal" className="ml-2">
+              <label htmlFor="Cash on Delivery" className="ml-2">
                 Cash on Delivery
               </label>
             </div>

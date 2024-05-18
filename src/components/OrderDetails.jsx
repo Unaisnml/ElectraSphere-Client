@@ -1,15 +1,14 @@
-import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { Loader } from "../components/Loader";
 import {
   useGetOrderDetailsQuery,
-  usePayOrderMutation,
-  useGetPayPalClientIdQuery,
+  usePackOrderMutation,
+  useShipOrderMutation,
+  useDeliverOrderMutation,
 } from "../slices/orderApiSlice";
 import Message from "./Message";
-import { useSelector } from "react-redux";
-import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import { toast } from "react-toastify";
+import { formatDate } from "../utils/dateUtils";
 
 const OrderDetails = () => {
   const { id: orderId } = useParams();
@@ -19,81 +18,34 @@ const OrderDetails = () => {
     isLoading,
     error,
   } = useGetOrderDetailsQuery(orderId);
-
-  const [payOrder, { isLoading: paymentLoading }] = usePayOrderMutation();
-
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-
-  const {
-    data: paypal,
-    isLoading: paypalLoading,
-    error: payPalError,
-  } = useGetPayPalClientIdQuery();
-
   const { userInfo } = useSelector((state) => state.auth);
+  const [packOrder, { isLoading: packLoading, error: packError }] =
+    useDeliverOrderMutation();
+  const [shipOrder, { isLoading: shipLoading, error: shipError }] =
+    useShipOrderMutation();
+  const [deliverOrder, { isLoading: deliverLoading, error: deliverError }] =
+    useDeliverOrderMutation();
 
-  useEffect(() => {
-    if (!paypalLoading && !payPalError && paypal.clientId) {
-      const loadPayPalScript = async () => {
-        paypalDispatch({
-          type: "resetOptions",
-          value: {
-            clientId: paypal.clientId,
-            currency: "INR",
-          },
-        });
-        paypalDispatch({ type: "setLoadingStatus", value: "pending" });
-      };
-      if (order && !order.isPaid) {
-        if (!window.paypal) {
-          loadPayPalScript();
-        }
-      }
-    }
-  }, [order, paypal, paypalDispatch, paypalLoading, payPalError]);
-
-  function onApprove(data, actions) {
-    return actions.order.capture().then(async function (details) {
-      try {
-        await payOrder({ orderId, details });
-        refetch();
-        toast.success("Payment Success");
-      } catch (error) {
-        toast.error(err?.data?.message || err.message);
-      }
-    });
-  }
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
+  const packHandler = async () => {
+    await packOrder(orderId);
     refetch();
-    toast.success("Payment Success");
-  }
-  function createOrder(data, actions) {
-    return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: {
-              value: order.totalPrice,
-            },
-          },
-        ],
-      })
-      .then((orderId) => {
-        return orderId;
-      });
-  }
+  };
+  const shipHandler = async () => {
+    await shipOrder();
+    refetch();
+  };
 
-  function onError(err) {
-    toast.error(err.message);
-  }
+  const deliverHandler = async () => {
+    await deliverOrder(orderId);
+    refetch();
+  };
 
   return isLoading ? (
     Loader
   ) : error ? (
-    <Message variant="danger">No order found</Message>
+    <Message variant="danger ">Order not found</Message>
   ) : (
-    <section className=" flex md:flex-row flex-col gap-6 mx-auto my-10 ">
+    <section className=" flex md:flex-row flex-col gap-6 mx-auto  ">
       {/* Order items container */}
 
       <div className="flex flex-col justify-between md:w-[65%] w-full h-full rounded-lg shadow-xl p-6 gap-4 ">
@@ -117,8 +69,8 @@ const OrderDetails = () => {
           </div>
 
           {order.isDelivered ? (
-            <Message variant="successs">
-              Delivered on: {order.deliveredAt}
+            <Message variant="success">
+              Delivered on: {formatDate(order.deliveredAt)}
             </Message>
           ) : (
             <Message variant="danger">Not Delivered</Message>
@@ -129,7 +81,9 @@ const OrderDetails = () => {
           </p>
 
           {order.isPaid ? (
-            <Message variant="successs">Paid on: {order.paidAt}</Message>
+            <Message variant="success">
+              Paid on: {formatDate(order.paidAt)}
+            </Message>
           ) : (
             <Message variant="danger">Not Paid</Message>
           )}
@@ -152,7 +106,7 @@ const OrderDetails = () => {
                     alt="product-img"
                     className="rounded-md   md:max-w-[4rem] max-h-[4rem]"
                   />
-                  <Link to={`/products/${item._id}`}>{item.name}</Link>
+                  <Link to={`/products/${order._id}`}>{item.name}</Link>
                 </div>
                 <p className="text-base ">
                   {item.count} x {item.price} = {item.count * item.price}
@@ -163,7 +117,7 @@ const OrderDetails = () => {
         </div>
       </div>
 
-      {/* Cart total container*/}
+      {/* Price total container*/}
       <div className="flex  flex-col rounded-lg shadow-xl p-4 gap-4 text-base h-full">
         <h4 className="my-2 text-lg font-semibold uppercase border-b  text-green-500">
           order summary
@@ -187,30 +141,31 @@ const OrderDetails = () => {
           <p>Grand Total</p>
           <p>₹ {order.totalPrice}</p>
         </div>
-        {!order.isPaid && (
+
+        {userInfo?.isAdmin && !order.isDelivered && (
           <div>
-            {isLoading ? (
-              <Loader />
-            ) : isPending ? (
-              <Loader />
-            ) : (
-              <div>
-                <button
-                  onClick={onApproveTest}
-                  className="bg-blue-200 mb-2 py-2 px-4 rounded-md"
-                >
-                  Test button
-                </button>
-                <PayPalButtons
-                  createOrder={createOrder}
-                  onApprove={onApprove}
-                  onError={onError}
-                />
-              </div>
+            <button
+              onClick={deliverHandler}
+              className="bg-black py-2 w-full text-white"
+            >
+              Deliver Item
+            </button>
+            {deliverLoading && <Loader />}
+            {deliverError && (
+              <Message variant="danger">{deliverError.message}</Message>
             )}
           </div>
         )}
-        {isLoading && <Loader />}
+        {!userInfo?.isAdmin && (
+          <div className="w-full flex flex-col text-white text-center gap-4">
+            <Link to="/order/my-orders" className="bg-black py-2">
+              Go to My Orders
+            </Link>
+            <Link to="/" className="bg-black py-2">
+              Continue Shopping
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,11 +1,25 @@
 import { apiSlice } from "./apiSlice";
-import { ORDERS_URL, PAYPAL_URL } from "../constants";
+import { ORDERS_URL, RAZORPAY_URL } from "../constants";
 
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    checkoutOrder: builder.mutation({
+      query: (order) => ({
+        url: `${ORDERS_URL}/checkout`,
+        method: "POST",
+        body: order,
+      }),
+    }),
+    verifyPayment: builder.mutation({
+      query: (data) => ({
+        url: `${ORDERS_URL}/verifyPayment`,
+        method: "POST",
+        body: { ...data },
+      }),
+    }),
     createOrder: builder.mutation({
       query: (order) => ({
-        url: ORDERS_URL,
+        url: `${ORDERS_URL}`,
         method: "POST",
         body: { ...order },
       }),
@@ -16,25 +30,48 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
-    payOrder: builder.mutation({
-      query: ({ orderId, details }) => ({
-        url: `${ORDERS_URL}/${orderId}/pay`,
-        method: "PUT",
-        body: details,
-      }),
-    }),
-    getPayPalClientId: builder.query({
+    getOrders: builder.query({
       query: () => ({
-        url: PAYPAL_URL,
+        url: ORDERS_URL,
       }),
       keepUnusedDataFor: 5,
+    }),
+    getMyOrders:builder.query({
+      query: ()=> ({
+        url:`${ORDERS_URL}/myorders`
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    packOrder: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/pack`,
+        method: "PUT",
+      }),
+    }),
+
+    shipOrder: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/deliver`,
+        method: "PUT",
+      }),
+    }),
+    deliverOrder: builder.mutation({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/deliver`,
+        method: "PUT",
+      }),
     }),
   }),
 });
 
 export const {
+  useCheckoutOrderMutation,
+  useVerifyPaymentMutation,
   useCreateOrderMutation,
   useGetOrderDetailsQuery,
-  usePayOrderMutation,
-  useGetPayPalClientIdQuery,
+  useGetOrdersQuery,
+  useGetMyOrdersQuery,
+  usePackOrderMutation,
+  useShipOrderMutation,
+  useDeliverOrderMutation,
 } = orderApiSlice;

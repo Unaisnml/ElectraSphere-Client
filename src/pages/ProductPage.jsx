@@ -62,12 +62,12 @@ const ProductPage = () => {
           <div className="w-1/2 h-auto  flex  space-y-4 items-center justify-center gap-8 overflow-hidden ">
             <div className="md:grid grid-cols-1  gap-3 overflow-hidden justify-center min-w-20  hidden">
               <img
-                src={product.image}
+                src={product.image[0]}
                 alt=""
                 className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
               />
               <img
-                src={product.image}
+                src={product.image[1]}
                 alt=""
                 className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
               />
@@ -84,7 +84,7 @@ const ProductPage = () => {
             </div>
 
             <img
-              src={product.image}
+              src={product.image[0]}
               alt=""
               className="md:max-w-[70%] max-h-[22rem] object-contain"
             />

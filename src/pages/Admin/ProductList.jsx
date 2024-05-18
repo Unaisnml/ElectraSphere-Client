@@ -63,7 +63,6 @@ const ProductList = () => {
     }
   };
 
-
   return (
     <section className="w-full pl-[18rem]  h-auto bg-gray-200 mt-20 pr-4 py-6 mx-auto max-container  ">
       <div className="flex justify-between w-full">
@@ -92,9 +91,9 @@ const ProductList = () => {
                 <div className="flex w-full gap-4 mb-2">
                   <Link to="/product">
                     <img
-                      src={product.image}
+                      src={product.image[0]}
                       alt="product"
-                      className="h-32 w-30 rounded-md"
+                      className="h-32 w-auto rounded-md"
                     />
                   </Link>
                   <div className="flex  justify-between w-full gap-1">
@@ -111,14 +110,10 @@ const ProductList = () => {
                         <MdDeleteForever />
                       </button>
                       <Link to={`/admin/products/${product._id}/edit`}>
-                      <button className="px-2 py-1 shadow rounded-md text-lg text-blue-800">
-                        <FiEdit />
-                      </button>
+                        <button className="px-2 py-1 shadow rounded-md text-lg text-blue-800">
+                          <FiEdit />
+                        </button>
                       </Link>
-
-                     
-                        
-
                     </div>
                   </div>
                 </div>
@@ -135,7 +130,7 @@ const ProductList = () => {
                   <hr />
                   <div className="flex justify-between">
                     <p className="text-sm">Remaining Products</p>
-                    <p className="text-sm">stockQuantity</p>
+                    <p className="text-sm">{product.stockQuantity}</p>
                   </div>
                 </div>
               </div>

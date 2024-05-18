@@ -12,7 +12,7 @@ const ShippingPage = () => {
     postalCode: "",
   };
   return (
-    <section className="container flex flex-col items-center justify-center mx-auto mt-8 mb-36 border rounded-lg py-8  w-1/2">
+    <section className="container flex flex-col items-center justify-center mx-auto mt-32 mb-36 border rounded-lg py-8  w-1/2">
       <ShippingAddress initialValues={initialValues} />
     </section>
   );

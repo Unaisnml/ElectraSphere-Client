@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { navItems } from "../constants/index";
 import { FaSearch, FaShoppingCart, FaHeart } from "react-icons/fa";
@@ -20,9 +20,28 @@ const NavBar1 = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  // const handleButtonClick = () => {
+  //   setIsOpen(!isOpen);
+  // };
+
+  const dropdownRef = useRef(null);
+
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -94,13 +113,13 @@ const NavBar1 = () => {
                 </Link>
                 <Link to="/whishlist" className="relative">
                   <FaHeart />
-                  <span className="count-div"></span>
+                  <span className="count-div">0</span>
                 </Link>
               </>
             )}
 
-            {/* ---------------------------------------------------------------------------------- */}
-            <div className="relative inline-block text-left">
+            {/*dropdown */}
+            <div className="relative inline-block text-left" ref={dropdownRef}>
               <div>
                 {userInfo ? (
                   <button
@@ -143,19 +162,32 @@ const NavBar1 = () => {
                   aria-labelledby="menu-button"
                   tabIndex="-1"
                 >
-                  <div className="py-1" role="none">
-                    {/* <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" --> */}
-                    <Link
-                      to="/profile"
-                      className="text-gray-700 block px-4 py-2 text-sm"
-                      role="menuitem"
-                      tabIndex="-1"
-                      id="menu-item-0"
-                    >
-                      My Profile
-                    </Link>
+                  <div className="py-1 w-full" role="none">
+                    {!userInfo?.isAdmin && (
+                      <>
+                        <Link
+                          to="/profile"
+                          className="text-gray-700 block px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="menu-item-0"
+                        >
+                          My Profile
+                        </Link>
+                        <Link
+                          to="/order/my-orders"
+                          className="text-gray-700 block px-4 py-2 text-sm"
+                          role="menuitem"
+                          tabIndex="-1"
+                          id="menu-item-0"
+                        >
+                          My Orders
+                        </Link>
+                      </>
+                    )}
+
                     <button
-                      className="text-gray-700  px-4 py-2 text-sm"
+                      className="text-gray-700  px-4 py-2 text-sm w-full text-start"
                       role="menuitem"
                       tabIndex="-1"
                       id="menu-item-1"
@@ -168,8 +200,7 @@ const NavBar1 = () => {
               )}
             </div>
 
-            {/* ---------------------------------------------- */}
-
+            {/* Hamburger mernu*/}
             <button
               className="hidden focus:outline-none focus:text-gray-500 max-lg:block"
               onClick={toggleMenu}
@@ -200,6 +231,8 @@ const NavBar1 = () => {
             ))}
           </div>
         </nav>
+
+        {/* Search bar for small devices */}
         <div className="hidden relative  max-lg:block my-2">
           <input
             className="focus:outline-none border-none w-full mt-1 bg-gray-200 rounded-xl px-2 py-1/2 pl-8 "
@@ -209,7 +242,6 @@ const NavBar1 = () => {
           <FaSearch className="absolute left-2 top-2/4 transform -translate-y-2/4 text-gray-300 " />
         </div>
       </header>
-      {/* <hr className="w-full h-0.5 border-gray-400" /> */}
     </section>
   );
 };

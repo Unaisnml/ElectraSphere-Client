@@ -42,7 +42,7 @@ const UsersList = () => {
   };
 
   return (
-    <section className="w-full pl-[18rem]  max-h-screen bg-gray-200 mt-20 pr-4 py-6 mx-auto max-container  ">
+    <section className="w-full pl-[18rem]  min-h-screen max-h-auto bg-gray-200 mt-20 pr-4 py-6 mx-auto max-container  ">
       <h3 className="font-semibold text-xl mb-3 ">Registered Users</h3>
       {isLoading ? (
         <Loader />

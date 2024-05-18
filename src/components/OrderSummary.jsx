@@ -1,19 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Loader } from "./Loader";
-import { useCreateOrderMutation } from "../slices/orderApiSlice";
+import {
+  useCreateOrderMutation,
+  useCheckoutOrderMutation,
+  useVerifyPaymentMutation,
+} from "../slices/orderApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
 import Button from "./Button";
 
 const OrderSummary = () => {
   const cart = useSelector((state) => state.cart);
-
-  // const {userInfo} = useSelector((state) => state.auth);
+  const [paymentInfo, setPaymentInfo] = useState({
+    razorpayPaymentId: "",
+    razorpayOrderId: "",
+  });
+  console.log("paymentInfo", paymentInfo, cart.shippingAddress);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+  const [checkoutOrder, { isLoading, error }] = useCheckoutOrderMutation();
+  const [
+    VerifyPayment,
+    { isLoading: verificationLoading, error: verificationError },
+  ] = useVerifyPaymentMutation();
+  const [createOrder, { isLoading: createLoading, error: createError }] =
+    useCreateOrderMutation();
 
   useEffect(() => {
     if (!cart.shippingAddress) {
@@ -33,12 +46,102 @@ const OrderSummary = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
+        paymentInfo,
       }).unwrap();
+      toast.success("Order Placed Successfully");
       dispatch(clearCartItems());
-      console.log("Order response", res);
+      // console.log("Order response", res);
+      // toast.success('Order Placed Successfully')
       navigate(`/order/${res._id}`);
     } catch (err) {
       toast.error(err);
+    }
+  };
+
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  const checkOutHandler = async () => {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+    if (!res) {
+      alert("Razorpay sdk failed to load");
+      return;
+    }
+
+    try {
+      const result = await checkoutOrder({
+        amount: cart.totalPrice,
+      });
+
+      // Check if result exists and handle accordingly
+      if (!result) {
+        alert("Something went wrong");
+        return;
+      }
+
+      // Getting the order details back
+      const { amount, id: order_id, currency } = result.data;
+      console.log("result", result, "amount: ", amount);
+
+      const options = {
+        key: "rzp_test_HBp8bYbd3aJaeR", // Enter the Key ID generated from the Dashboard
+        amount: amount,
+        currency: currency,
+        name: "Shop.io",
+        description: "Test Transaction",
+        order_id: order_id,
+        handler: async function (response) {
+          const data = {
+            orderCreationId: order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            // razorpaySignature: response.razorpay_signature,
+          };
+
+          const result = await VerifyPayment(data);
+          console.log("verification", result);
+          const newPaymentInfo = {
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+          };
+
+          setPaymentInfo(newPaymentInfo);
+
+          setTimeout(() => {
+            placeOrderHandler(paymentInfo);
+          }, 2000);
+        },
+        prefill: {
+          name: "UNAIS",
+          email: "unaisnml@gmail.com",
+          contact: "9995010673",
+        },
+        notes: {
+          address: "Shop.io,Kerala",
+        },
+        theme: {
+          color: "#fffff",
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (err) {
+      console.error("Error during checkout:", err);
+      toast.error(err?.data?.message || err.message);
     }
   };
 
@@ -50,7 +153,7 @@ const OrderSummary = () => {
         {/* Order items list contaner */}
         <div>
           <h3 className="text-xl mb-4 font-semibold uppercase text-green-500">
-            Shipping Address:
+            Shipping Address
           </h3>
           <p className="mb-4">
             {cart.shippingAddress.houseName},{" "}
@@ -59,12 +162,12 @@ const OrderSummary = () => {
           </p>
           <hr />
           <h3 className="text-xl my-4 font-semibold uppercase text-green-500">
-            Payment Method:
+            Payment Method
           </h3>
           <p className="mb-4">{cart.paymentMethod}</p>
           <hr />
           <h3 className="text-xl my-4 font-semibold uppercase text-green-500">
-            Order Items:
+            Order Items
           </h3>
           {cart.cartItems.length === 0 ? (
             <span>Your Cart is Empty</span>
@@ -99,11 +202,7 @@ const OrderSummary = () => {
           Price Details
         </h4>
         <div className="flex justify-between space-x-16 md:space-x-">
-          <p>
-            Items
-            {/* ({cartItems.reduce((acc, item) => acc + item.count, 0)}) */}
-          </p>
-          {/* <p key={item._id}>₹ {cartItems.reduce((acc, item)=> acc + (item.count * item.price))}</p> */}
+          <p>Items</p>
           <p key="sub-total">₹{cart.itemsPrice}</p>
         </div>
         <div className="flex justify-between space-x-16 md:space-x-44">
@@ -129,8 +228,13 @@ const OrderSummary = () => {
   )}
         </div> */}
 
-        <Button label=" Place Order" onClick={placeOrderHandler} />
+        <Button
+          label="Place Order"
+          onClick={() => setTimeout(checkOutHandler, 2000)}
+        />
+
         {isLoading && <Loader />}
+        {createLoading && <Loader />}
       </div>
     </section>
   );

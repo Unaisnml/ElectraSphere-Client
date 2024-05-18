@@ -12,7 +12,7 @@ export const updateCart = (state) => {
   console.log("itemsPrice type is", typeof itemsPrice);
 
   //   Calculate tax price
-  const taxPrice = 0.05 * itemsPrice;
+  const taxPrice = 0.15 * itemsPrice;
   state.taxPrice = addDecimals(taxPrice);
   console.log("type of  taxPrice", typeof taxPrice);
 
