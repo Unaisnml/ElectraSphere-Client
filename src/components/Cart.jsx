@@ -140,7 +140,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
           </button>
         </div>
 
-        <Button label=" Proceed to payment" onClick={checkoutHandler} />
+        <Button label=" Continue to Shipping" onClick={checkoutHandler} />
       </div>
     </section>
   );

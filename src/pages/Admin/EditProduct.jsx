@@ -14,11 +14,13 @@ const EditPrductForm = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imgUrl, setImgUrl] = useState(null);
   const { id: productId } = useParams();
+  
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue
   } = useForm();
 
   const {
@@ -28,11 +30,11 @@ const EditPrductForm = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+  useUploadProductImageMutation();
+  
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
-
-  const [uploadProductImage, { isLoading: loadingUpload }] =
-    useUploadProductImageMutation();
 
   const uploadFileHandler = async (e) => {
     const formData = new FormData();
@@ -74,7 +76,7 @@ const EditPrductForm = () => {
         productId,
         name,
         price,
-        image: imgUrl,
+        image : imgUrl || product.image,
         category,
         brand,
         description,
@@ -88,11 +90,24 @@ const EditPrductForm = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (product) {
+  //     setImagePreview(product.image[0]);
+  //   }
+  // }, [product]);
+
   useEffect(() => {
     if (product) {
+      setValue("name", product.name);
+      setValue("price", product.price);
+      setValue("category", product.category);
+      setValue("brand", product.brand);
+      setValue("description", product.description);
+      setValue("stockQuantity", product.stockQuantity);
       setImagePreview(product.image[0]);
     }
-  }, [product]);
+  }, [product, setValue]);
+
   return (
     <section className="w-full pl-[18rem]  h-auto bg-gray-200 mt-20 pr-4 py-6 mx-auto max-container  ">
       <h3 className="font-semibold text-xl my-3 ">Product Details</h3>

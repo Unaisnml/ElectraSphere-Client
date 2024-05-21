@@ -23,7 +23,7 @@ const AdminNav = () => {
       <div className="flex flex-col my-12 items-start gap-6  w-full">
         <div className="admin-link">
           <MdOutlineDashboard />
-          <Link to="/admin" className="">
+          <Link to="/" className="">
             Dashboard
           </Link>
         </div>

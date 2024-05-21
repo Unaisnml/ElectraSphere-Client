@@ -1,11 +1,13 @@
-import React from 'react'
+import React from "react";
+import Dashboard from "../../components/Dashboard";
 
 const AdminHome = () => {
   return (
-    <section className='pl-[19rem] py-6 h-auto bg-gray-200 '>
-        DashBoard
+    <section className="pl-[18rem] pb-6 pt-12 min-h-screen max-h-auto bg-gray-200  ">
+      <h2 className="text-xl font-semibold my-3">Admin Home</h2>
+      <Dashboard />
     </section>
-  )
-}
+  );
+};
 
-export default AdminHome
+export default AdminHome;

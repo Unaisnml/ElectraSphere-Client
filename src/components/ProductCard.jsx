@@ -37,7 +37,7 @@ const ProductCard = ({ products = [], isLoading, error }) => {
                 <Link to={`/products/${product._id}`}>
                   <img
                     className="w-full h-full object-contain transition duration-300 ease-in-out transform group-hover:scale-110 "
-                    src={product.image}
+                    src={product.image[0]}
                     alt=""
                   />
                 </Link>
@@ -64,11 +64,12 @@ const ProductCard = ({ products = [], isLoading, error }) => {
           ))}
         </div>
       )}
-
-      <Button
-        onClick={handleViewAllClick}
-        label={showAllProducts ? "View Less" : "View All"}
-      />
+      {filteredProduct.length >= 4 && (
+        <Button
+          onClick={handleViewAllClick}
+          label={showAllProducts ? "View Less" : "View All"}
+        />
+      )}
     </section>
   );
 };

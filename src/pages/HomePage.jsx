@@ -13,6 +13,7 @@ import AdminHome from "./Admin/AdminHome";
 const HomePage = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { data: products, isLoading, error } = useGetProductsQuery();
+  const filteredProducts = products?.filter(product => product.isDelivered > 5);
   return (
     <main className="relative mt-10">
       {
@@ -45,9 +46,9 @@ const HomePage = () => {
         </section>
         {products && (
           <ProductCard
-            products={products}
-            isLoading={isLoading}
-            error={error}
+            products={filteredProducts}
+            // isLoading={isLoading}
+            // error={error}
           />
         )}
       </section>

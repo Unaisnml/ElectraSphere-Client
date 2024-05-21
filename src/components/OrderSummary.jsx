@@ -180,7 +180,7 @@ const OrderSummary = () => {
                 >
                   <div className="flex items-center justify-center gap-4 ">
                     <img
-                      src={item.image}
+                      src={item.image[0]}
                       alt="product-img"
                       className="rounded-md   md:max-w-[4rem] max-h-[4rem]"
                     />

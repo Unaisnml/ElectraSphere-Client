@@ -5,12 +5,13 @@ import Rating from "../components/Rating";
 import Button from "../components/Button";
 import { HiOutlineHeart } from "react-icons/hi2";
 import { useGetProductDetailsQuery } from "../slices/productApiSlice";
-import {Loader} from "../components/Loader";
+import { Loader } from "../components/Loader";
 import CountButton from "../components/CountButton";
 import { addToCart } from "../slices/cartSlice";
 import Swal from "sweetalert2";
 
 const ProductPage = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
   const { id: productId } = useParams();
   const dispatch = useDispatch();
   const {
@@ -18,6 +19,16 @@ const ProductPage = () => {
     isLoading,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  useState(() => {
+    if (product) {
+      setSelectedImage(product.image[0]);
+    }
+  }, [product]);
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+  };
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, count }));
@@ -35,21 +46,6 @@ const ProductPage = () => {
   const decrementCount = () => {
     setCount((prevCount) => (prevCount > 1 ? prevCount - 1 : prevCount));
   };
-  // const [product, setProduct] = useState({});
-  // useEffect(() => {
-  //   const fetchProduct = async () => {
-  //     try {
-  //       const { data } = await axios.get(
-  //         `http://localhost:5000/api/products/${productId}`
-  //       );
-  //       setProduct(data);
-  //     } catch (error) {
-  //       console.error("Error fetching product:", error);
-  //     }
-  //   };
-
-  //   fetchProduct();
-  // }, [productId]);
 
   return (
     <section className="container mx-auto mt-20">
@@ -60,31 +56,20 @@ const ProductPage = () => {
       ) : (
         <div className=" flex  md:flex-row flex-col items-center  gap-6  py-12 mx-auto">
           <div className="w-1/2 h-auto  flex  space-y-4 items-center justify-center gap-8 overflow-hidden ">
-            <div className="md:grid grid-cols-1  gap-3 overflow-hidden justify-center min-w-20  hidden">
-              <img
-                src={product.image[0]}
-                alt=""
-                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
-              />
-              <img
-                src={product.image[1]}
-                alt=""
-                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
-              />
-              <img
-                src={product.image}
-                alt=""
-                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
-              />
-              <img
-                src={product.image}
-                alt=""
-                className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer "
-              />
+            <div className="md:grid grid-cols-1 gap-3 overflow-hidden justify-center min-w-20 hidden">
+              {product.image.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt=""
+                  onClick={() => handleImageClick(image)}
+                  className="max-w-[90px] md:max-h-[75px] rounded-md hover:border border-gray-600 cursor-pointer"
+                />
+              ))}
             </div>
-
+            {/* Image preview area */}
             <img
-              src={product.image[0]}
+              src={selectedImage || product.image[0]}
               alt=""
               className="md:max-w-[70%] max-h-[22rem] object-contain"
             />
@@ -107,11 +92,11 @@ const ProductPage = () => {
               {product.description}
             </p>
             <hr className=" border-gray-700 h-1 w-full my-2 " />
-            <div className="flex items-center text-md font-semibold space-x-3 ">
+            {/* <div className="flex items-center text-md font-semibold space-x-3 ">
               <p>Colors:</p>
               <span className="w-4 h-4 rounded-full bg-red-600  border-black border-solid border-2"></span>
               <span className="w-4 h-4 rounded-full bg-green-600  border-black border-solid border-2"></span>
-            </div>
+            </div> */}
             <div className=" mt-4 flex space-x-2 ">
               <CountButton
                 count={count}
@@ -129,7 +114,7 @@ const ProductPage = () => {
                 <HiOutlineHeart />
               </button>
             </div>
-            {product.stockQuantity <= 5 ? (
+            {product.stockQuantity <= 10 ? (
               <span className="my-4 opacity-50">
                 Only {product.stockQuantity} items available!
               </span>
