@@ -8,7 +8,7 @@ import { useLoginMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 
-const LoginForm = (initialValues) => {
+const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
@@ -27,7 +27,7 @@ const LoginForm = (initialValues) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email format")
-      .required("Email is Required"),
+      .required("Email is required"),
     password: Yup.string().required("Password is required"),
   });
 
@@ -37,21 +37,21 @@ const LoginForm = (initialValues) => {
     try {
       const res = await login({ email, password }).unwrap();
       console.log("response", res);
-      dispatch(setCredentials({ ...res })); //new code
-
+      dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
+    setSubmitting(false);
   };
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{ email: "", password: "" }}
       validationSchema={validationSchema}
       onSubmit={onSubmitHandler}
     >
-      {({ isLoading }) => (
+      {({ isSubmitting }) => (
         <Form className="flex flex-col w-full md:gap-8 gap-4">
           <h1 className="text-xl font-semibold">Sign In</h1>
           <div className="gap-2">
@@ -90,14 +90,14 @@ const LoginForm = (initialValues) => {
           <button
             type="submit"
             className="bg-black text-white text-sm py-1"
-            disabled={isLoading}
+            disabled={isSubmitting || isLoading}
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>
           {isLoading && <Loader />}
 
-          <div className="flex md:flex-row flex-col justify-between items-center md:mt-2 space-y-2 text-sm">
-            <Link to="/forgot-password">Forgot Password?</Link>
+          <div className="flex md:flex-row flex-col justify-center items-center md:mt-2 space-y-2 text-sm">
+            {/* <Link to="/forgot-password">Forgot Password?</Link> */}
             <Link
               to={redirect ? `/register?redirect=${redirect}` : "/register"}
             >

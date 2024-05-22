@@ -10,6 +10,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    verifyotp: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/verifyOtp`,
+        method: "POST",
+        body:data
+      }),
+    }),
     login: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/auth`,
@@ -37,20 +44,19 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getUserDetails: builder.query({
-      query:(userId)=>({
-        url: `${USERS_URL}/${userId}`
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}`,
       }),
-      keepUnusedDataFor:5
-        
+      keepUnusedDataFor: 5,
     }),
     updateUserDetails: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/${data.userId}`,
-        method:'PUT',
-        body:data
+        method: "PUT",
+        body: data,
       }),
-      invalidatesTags: ['User']
-    })
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -58,8 +64,9 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useVerifyotpMutation,
   useGetUsersQuery,
   useDeleteUserMutation,
   useGetUserDetailsQuery,
-  useUpdateUserDetailsMutation
+  useUpdateUserDetailsMutation,
 } = usersApiSlice;

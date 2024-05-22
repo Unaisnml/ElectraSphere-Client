@@ -1,7 +1,6 @@
 import React from "react";
 import { Cart } from "../components/Cart";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import EmptyState from "../components/EmptyState";
 
 const CartPage = () => {

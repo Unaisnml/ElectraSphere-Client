@@ -228,13 +228,11 @@ const OrderSummary = () => {
   )}
         </div> */}
 
-        <Button
-          label="Place Order"
-          onClick={() => setTimeout(checkOutHandler, 2000)}
-        />
+        <Button label="Place Order" onClick={checkOutHandler} />
 
         {isLoading && <Loader />}
         {createLoading && <Loader />}
+        {verificationLoading && <Loader />}
       </div>
     </section>
   );

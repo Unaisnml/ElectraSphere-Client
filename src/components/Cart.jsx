@@ -60,12 +60,11 @@ export const Cart = ({ cartItems, shippingPrice }) => {
           <div key={item._id} className="flex  gap-6 p-2 border-b">
             <Link to={`/products/${item._id}`}>
               <img
-                src={item.image}
+                src={item.image[0]}
                 alt="product-img"
                 className="rounded-lg  md:max-w-[8rem] max-h-[8rem]"
               />
             </Link>
-
             <div className="flex flex-col  justify-center w-full gap-2 ">
               {/* Container for product name and delete button */}
               <div className="flex justify-between">
@@ -84,15 +83,14 @@ export const Cart = ({ cartItems, shippingPrice }) => {
               {/* Container for Product price and Count button */}
               <div className="flex md:flex-row  flex-col justify-between gap-4">
                 <h4 className="md:text-xl text-sm font-bold">₹ {item.price}</h4>
-              <div className="w-1/2 md:w-fit">
-
-                <CountButton
-                  count={item.count}
-                  stockQuantity={item.stockQuantity}
-                  onIncrement={() => handleIncrement(item._id)}
-                  onDecrement={() => handleDecrement(item._id)}
+                <div className="w-1/2 md:w-fit">
+                  <CountButton
+                    count={item.count}
+                    stockQuantity={item.stockQuantity}
+                    onIncrement={() => handleIncrement(item._id)}
+                    onDecrement={() => handleDecrement(item._id)}
                   />
-                  </div>
+                </div>
                 <span>₹ {Math.round(item.price * item.count)}</span>
               </div>
             </div>

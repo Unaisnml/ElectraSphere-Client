@@ -41,9 +41,9 @@ const OrderDetails = () => {
   };
 
   return isLoading ? (
-    Loader
+    <Loader/>
   ) : error ? (
-    <Message variant="danger ">Order not found</Message>
+    <Message variant="danger">Order not found</Message>
   ) : (
     <section className=" flex md:flex-row flex-col gap-6 mx-auto  ">
       {/* Order items container */}

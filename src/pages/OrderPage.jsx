@@ -1,13 +1,13 @@
-import React from 'react'
-import OrderSummary from '../components/OrderSummary'
+import React from "react";
+import OrderSummary from "../components/OrderSummary";
 
 const OrderPage = () => {
   return (
     <section className="container mx-auto my-4 md:mt-32 md:pb-16 h-auto max-w-[85%] ">
       <h2 className="my-3 container text-2xl font-bold  ">Order Summary</h2>
-      <OrderSummary/>
-      </section>
-  )
-}
+      <OrderSummary />
+    </section>
+  );
+};
 
-export default OrderPage
+export default OrderPage;
