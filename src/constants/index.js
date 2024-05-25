@@ -11,9 +11,9 @@ import {
 } from "../assets/icons";
 
 export const navItems = [
-  { name: "Shop", path: "/" },
-  { name: "On Sale", path: "/contact" },
-  { name: "New Arrivals", path: "/about" },
+  { name: "Shop", path: "/category" },
+  { name: "About Us", path: "/about" },
+  { name: "Contact", path: "/contact" },
   { name: "Brands", path: "/categories" },
 ];
 

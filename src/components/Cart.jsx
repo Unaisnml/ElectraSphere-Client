@@ -8,12 +8,13 @@ import Button from "./Button";
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+
 import {
   decrementItemCount,
   incrementItemCount,
   removeCartItem,
 } from "../slices/cartSlice";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
 export const Cart = ({ cartItems, shippingPrice }) => {
@@ -33,7 +34,8 @@ export const Cart = ({ cartItems, shippingPrice }) => {
 
     if (confirmation.isConfirmed) {
       dispatch(removeCartItem(id));
-      Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      // Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      toast.success('Your item has been deleted')
     }
   };
 
@@ -78,8 +80,8 @@ export const Cart = ({ cartItems, shippingPrice }) => {
                   <RiDeleteBin2Line />
                 </button>
               </div>
-              <p>Size :Large</p>
-              <p>Color :Red</p>
+              {/* <p>Size :Large</p>
+              <p>Color :Red</p> */}
               {/* Container for Product price and Count button */}
               <div className="flex md:flex-row  flex-col justify-between gap-4">
                 <h4 className="md:text-xl text-sm font-bold">₹ {item.price}</h4>

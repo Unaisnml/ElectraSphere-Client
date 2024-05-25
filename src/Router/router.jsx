@@ -8,7 +8,7 @@ import PrivateRoute from "../components/PrivateRoute";
 import HomePage from "../pages/HomePage";
 import ProductPage from "../pages/ProductPage";
 import CartPage from "../pages/CartPage";
-import WhishList from "../pages/WhishList";
+import WishListPage from "../pages/WishListPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ShippingPage from "../pages/ShippingPage";
@@ -22,6 +22,7 @@ import EditUserForm from "../pages/Admin/EditUser";
 import EditPrductForm from "../pages/Admin/EditProduct";
 import OrdersList from "../pages/Admin/OrderList";
 import MyOrdersList from "../pages/MyOrdersList";
+import CategoryPage from "../pages/CategoryPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,9 +30,10 @@ const router = createBrowserRouter(
       <Route path="/" element={<HomePage />} />
       <Route path="/products/:id" element={<ProductPage />} />
       <Route path="/cart" element={<CartPage />} />
-      <Route path="/cart" element={<WhishList />} />
+      <Route path="/wishList" element={<WishListPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/category" element={<CategoryPage/>} />
       {/* Registered users */}
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingPage />} />
