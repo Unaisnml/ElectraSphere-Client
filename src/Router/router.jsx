@@ -23,6 +23,7 @@ import EditPrductForm from "../pages/Admin/EditProduct";
 import OrdersList from "../pages/Admin/OrderList";
 import MyOrdersList from "../pages/MyOrdersList";
 import CategoryPage from "../pages/CategoryPage";
+import BrandsPage from "../pages/BrandsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,8 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/category" element={<CategoryPage/>} />
+      <Route path="/brands" element={<BrandsPage/>} />
+      
       {/* Registered users */}
       <Route path="" element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingPage />} />

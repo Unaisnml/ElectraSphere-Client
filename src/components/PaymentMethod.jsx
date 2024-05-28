@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { savePaymentMethod } from "../slices/cartSlice";
 
 const PaymentMethod = () => {
-  const [paymentMethod, setPaymentMethod] = useState("PayPal");
+  const [paymentMethod, setPaymentMethod] = useState("Razorpay");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -23,7 +23,7 @@ const PaymentMethod = () => {
     navigate("/placeorder");
   };
   return (
-    <div className="flex flex-col px-6 w-full  items-start">
+    <div className="flex flex-col px-6 w-full  items-start ">
       <h1 className="text-2xl font-semibold mb-4">Select Payment Method</h1>
       <form onSubmit={submitHandler} className="w-full ">
         <div className="flex flex-col gap-6">
@@ -43,7 +43,7 @@ const PaymentMethod = () => {
                 Razorpay
               </label>
             </div>
-            <div>
+            {/* <div>
               <input
                 type="radio"
                 id="cod"
@@ -56,7 +56,7 @@ const PaymentMethod = () => {
               <label htmlFor="Cash on Delivery" className="ml-2">
                 Cash on Delivery
               </label>
-            </div>
+            </div> */}
           </div>
         </div>
 

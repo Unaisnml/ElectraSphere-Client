@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Loader } from "./Loader";
@@ -17,12 +17,12 @@ const OrderSummary = () => {
     razorpayPaymentId: "",
     razorpayOrderId: "",
   });
-  console.log("paymentInfo", paymentInfo, cart.shippingAddress);
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [checkoutOrder, { isLoading, error }] = useCheckoutOrderMutation();
   const [
-    VerifyPayment,
+    verifyPayment,
     { isLoading: verificationLoading, error: verificationError },
   ] = useVerifyPaymentMutation();
   const [createOrder, { isLoading: createLoading, error: createError }] =
@@ -36,7 +36,7 @@ const OrderSummary = () => {
     }
   }, [cart.paymentMethod, cart.shippingAddress, navigate]);
 
-  const placeOrderHandler = async () => {
+  const placeOrderHandler = async (paymentInfo) => {
     try {
       const res = await createOrder({
         orderItems: cart.cartItems,
@@ -46,15 +46,13 @@ const OrderSummary = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-        paymentInfo,
+        paymentInfo: paymentInfo,
       }).unwrap();
       toast.success("Order Placed Successfully");
       dispatch(clearCartItems());
-      // console.log("Order response", res);
-      // toast.success('Order Placed Successfully')
       navigate(`/order/${res._id}`);
     } catch (err) {
-      toast.error(err);
+      toast.error(err?.data?.message || err.message);
     }
   };
 
@@ -62,12 +60,9 @@ const OrderSummary = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
       script.src = src;
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
+      script.onload = () => resolve(true);
+
+      script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
   };
@@ -77,7 +72,7 @@ const OrderSummary = () => {
       "https://checkout.razorpay.com/v1/checkout.js"
     );
     if (!res) {
-      alert("Razorpay sdk failed to load");
+      toast.error("Razorpay sdk failed to load");
       return;
     }
 
@@ -85,19 +80,22 @@ const OrderSummary = () => {
       const result = await checkoutOrder({
         amount: cart.totalPrice,
       });
-
       // Check if result exists and handle accordingly
-      if (!result) {
-        alert("Something went wrong");
+      if (!result || !result.data) {
+        toast.error("Something went wrong");
         return;
       }
 
       // Getting the order details back
       const { amount, id: order_id, currency } = result.data;
-      console.log("result", result, "amount: ", amount);
+
+      if (!amount || !order_id || !currency) {
+        toast.error("Invalid order details");
+        return;
+      }
 
       const options = {
-        key: "rzp_test_HBp8bYbd3aJaeR", // Enter the Key ID generated from the Dashboard
+        key: "rzp_test_HBp8bYbd3aJaeR", //Key ID generated from the Dashboard
         amount: amount,
         currency: currency,
         name: "Shop.io",
@@ -108,21 +106,23 @@ const OrderSummary = () => {
             orderCreationId: order_id,
             razorpayPaymentId: response.razorpay_payment_id,
             razorpayOrderId: response.razorpay_order_id,
-            // razorpaySignature: response.razorpay_signature,
           };
-
-          const result = await VerifyPayment(data);
-          console.log("verification", result);
-          const newPaymentInfo = {
-            razorpayPaymentId: response.razorpay_payment_id,
-            razorpayOrderId: response.razorpay_order_id,
-          };
-
-          setPaymentInfo(newPaymentInfo);
-
-          setTimeout(() => {
-            placeOrderHandler(paymentInfo);
-          }, 2000);
+          try {
+            const verifyResult = await verifyPayment(data).unwrap();
+            if (verifyResult) {
+              const newPaymentInfo = {
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpayOrderId: response.razorpay_order_id,
+              };
+              // console.log("verification", verifyResult);
+              setPaymentInfo(newPaymentInfo);
+              placeOrderHandler(newPaymentInfo);
+            } else {
+              toast.error("Payment verification failed");
+            }
+          } catch (verificationError) {
+            toast.error("Payment verification failed");
+          }
         },
         prefill: {
           name: "UNAIS",

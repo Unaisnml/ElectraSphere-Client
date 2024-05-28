@@ -4,13 +4,16 @@ import Message from "./Message";
 import { Link } from "react-router-dom";
 
 const ProductList = ({ products, isLoading, error }) => {
+  const filteredProduct = products.filter(
+    (products) => products.name !== "Sample name"
+  );
   return (
     <div className="w-3/4 p-4">
       {isLoading && <Loader />}
       {error && <p>Error loading products</p>}
-      {products && products.length > 0 ? (
+      {filteredProduct && filteredProduct.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {products.map((product) => (
+          {filteredProduct.map((product) => (
             <div
               key={product._id}
               className="border p-4 rounded-lg shadow-md min-w-44 w-auto"
@@ -34,12 +37,14 @@ const ProductList = ({ products, isLoading, error }) => {
           ))}
         </div>
       ) : (
-        !isLoading && <Message variant="danger">No products found matching the selected filters.</Message>
+        !isLoading && (
+          <Message variant="danger">
+            No products found matching the selected filters.
+          </Message>
+        )
       )}
     </div>
   );
 };
 
 export default ProductList;
-
-

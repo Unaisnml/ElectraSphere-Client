@@ -144,7 +144,7 @@ const ProductPage = () => {
                 <HiOutlineHeart />
               </button>
             </div>
-            {product.stockQuantity <= 10 ? (
+            {product.stockQuantity <= 10 && product.stockQuantity > 0 ? (
               <span className="my-4 opacity-50">
                 Only {product.stockQuantity} items available!
               </span>

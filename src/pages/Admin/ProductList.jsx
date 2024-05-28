@@ -93,7 +93,7 @@ const ProductList = () => {
                     <img
                       src={product.image[0]}
                       alt="product"
-                      className="h-32 w-auto rounded-md"
+                      className="h-28 w-32 rounded-md"
                     />
                   </Link>
                   <div className="flex  justify-between w-full gap-1">
@@ -123,11 +123,11 @@ const ProductList = () => {
                   {product.description}
                 </p>
                 <div className="flex flex-col gap-2 border p-2 rounded-md">
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <p className="text-sm">Sales</p>
-                    <p className="text-sm">Sales count</p>
-                  </div>
-                  <hr />
+                    <p className="text-sm">{order.count}</p>
+                  </div> */}
+                  {/* <hr /> */}
                   <div className="flex justify-between">
                     <p className="text-sm">Remaining Products</p>
                     <p className="text-sm">{product.stockQuantity}</p>

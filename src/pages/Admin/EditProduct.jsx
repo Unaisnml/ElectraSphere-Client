@@ -14,13 +14,13 @@ const EditPrductForm = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [imgUrl, setImgUrl] = useState(null);
   const { id: productId } = useParams();
-  
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm();
 
   const {
@@ -31,8 +31,8 @@ const EditPrductForm = () => {
   } = useGetProductDetailsQuery(productId);
 
   const [uploadProductImage, { isLoading: loadingUpload }] =
-  useUploadProductImageMutation();
-  
+    useUploadProductImageMutation();
+
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
@@ -72,15 +72,21 @@ const EditPrductForm = () => {
         description,
         stockQuantity,
       } = data;
+
+      let updatedImage = imgUrl || (product && product.image);
+
+      if (!imgUrl) {
+        updatedImage = product.image;
+      }
       await updateProduct({
         productId,
-        name,
-        price,
-        image : imgUrl || product.image,
-        category,
-        brand,
-        description,
-        stockQuantity,
+        name: name || product.name,
+        price: price || product.price,
+        image: updatedImage,
+        category: category || product.category,
+        brand: brand || product.brand,
+        description: description || product.description,
+        stockQuantity: stockQuantity || product.stockQuantity,
       }).unwrap();
       toast.success("Product Updated Successfully");
       refetch();
@@ -240,7 +246,8 @@ const EditPrductForm = () => {
                     multiple
                     accept=".jpg, .jpeg, .png"
                     placeholder="Product Image"
-                    {...register("image", { required: true })}
+                    {...register("image")}
+                    defaultValue={product.image ? undefined : null}
                     onChange={(e) => uploadFileHandler(e)}
                     className="w-full py-2 px-2 text-base rounded-md outline-none bg-white border border-gray-500"
                   />

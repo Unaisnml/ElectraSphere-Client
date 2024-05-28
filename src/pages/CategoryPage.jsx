@@ -4,7 +4,10 @@ import ProductList from "../components/ProductList";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import queryString from "query-string";
 import { Loader } from "../components/Loader";
-import { useGetProductsQuery, useGetFilteredProductsQuery } from "../slices/productApiSlice.js";
+import {
+  useGetProductsQuery,
+  useGetFilteredProductsQuery,
+} from "../slices/productApiSlice.js";
 
 const CategoryPage = () => {
   const navigate = useNavigate();
@@ -28,7 +31,7 @@ const CategoryPage = () => {
     brand: queryParams.brand || "",
     rating: queryParams.rating || "",
   });
-  
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -112,4 +115,3 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
-
