@@ -244,16 +244,18 @@ const NavBar1 = () => {
             </div>
 
             {/* Hamburger mernu*/}
-            <button
-              className="hidden focus:outline-none focus:text-gray-500 max-lg:block"
-              onClick={toggleMenu}
-            >
-              {isMenuOpen ? (
-                <FaXmark className="text-xl" />
-              ) : (
-                <FaBarsStaggered className="text-xl" />
-              )}
-            </button>
+            {!userInfo?.isAdmin && (
+              <button
+                className="hidden focus:outline-none focus:text-gray-500 max-lg:block"
+                onClick={toggleMenu}
+              >
+                {isMenuOpen ? (
+                  <FaXmark className="text-xl" />
+                ) : (
+                  <FaBarsStaggered className="text-xl" />
+                )}
+              </button>
+            )}
           </div>
           <div
             className={`gap-4 px-4  py-4 z-20 bg-gray-700 flex flex-col ${

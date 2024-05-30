@@ -56,13 +56,13 @@ const ProductPage = () => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, count }));
-    toast.success('Item added to Cart')
+    toast.success("Item added to Cart");
   };
 
-  const addToWishlistHandler = () =>{
-    dispatch(addToWishlist({...product}))
-    toast.success('Item added to wishlish')
-  }
+  const addToWishlistHandler = () => {
+    dispatch(addToWishlist({ ...product }));
+    toast.success("Item added to wishlish");
+  };
 
   const [count, setCount] = useState(1);
   const incrementCount = () => {
@@ -106,8 +106,8 @@ const ProductPage = () => {
             <h3 className="md:text-3xl text-xl  mb-2">{product.name}</h3>
             <div className="flex items-center justify-between leading-3 space-x-3">
               <Rating
-                value={product.ratings}
-                text={`${product.numReviews} reviews`}
+                value={product.rating}
+                text={`${product.reviews.length} reviews`}
               />
               {product.stockQuantity > 0 ? (
                 <p className="text-md text-green-500 font-medium">In Stock</p>
@@ -139,8 +139,9 @@ const ProductPage = () => {
                 count={product.count}
               />
               <button
-              onClick={addToWishlistHandler}
-               className="py-1  px-2 border md:text-3xl text-xl hover:bg-black rounded-xl hover:border-black text-black hover:text-white font-semibold border-black border-solid">
+                onClick={addToWishlistHandler}
+                className="py-1  px-2 border md:text-3xl text-xl hover:bg-black rounded-xl hover:border-black text-black hover:text-white font-semibold border-black border-solid"
+              >
                 <HiOutlineHeart />
               </button>
             </div>

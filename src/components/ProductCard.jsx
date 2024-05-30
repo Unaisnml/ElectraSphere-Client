@@ -45,7 +45,7 @@ const ProductCard = ({ products = [], isLoading, error }) => {
                 {/* <button className='px-10 py-4 bg-black outline-none text-white absolute bottom-0 left-0 right-0 hidden hover:block z-20'>Add to Cart</button> */}
               </div>
               <div className="flex flex-col items-start space-y-3">
-                <Link Link to={`/products/${product._id}`}>
+                <Link to={`/products/${product._id}`}>
                   <h2 className="text-red-700 text-lg font-bold ">
                     {product.name}
                   </h2>
@@ -53,12 +53,12 @@ const ProductCard = ({ products = [], isLoading, error }) => {
 
                 <h4 className="text-md font-semibold  ">${product.price}</h4>
                 {/* reviews */}
-                <div className="">
+                <Link to={`/products/${product._id}`} className="">
                   <Rating
-                    value={product.ratings}
-                    text={`${product.numReviews} reviews`}
+                    value={product.rating}
+                    text={`${product.reviews.length} reviews`}
                   />
-                </div>
+                </Link>
               </div>
             </div>
           ))}
