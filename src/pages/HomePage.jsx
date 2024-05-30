@@ -9,6 +9,7 @@ import Line from "../components/Line";
 import { useGetProductsQuery } from "../slices/productApiSlice";
 import { useSelector } from "react-redux";
 import AdminHome from "./Admin/AdminHome";
+import ProductCarousel from "../components/ProductCarousel";
 
 const HomePage = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -17,14 +18,15 @@ const HomePage = () => {
     (product) => product.isDelivered > 5
   );
   return (
-    <main className="relative mt-10">
+    <main className="relative mt-32">
       {!userInfo?.isAdmin && (
         <>
           <section>
-            <Hero />
+            <ProductCarousel/>
+            {/* <Hero /> */}
           </section>
           <section>
-            <CompanyLogos />
+            {/* <CompanyLogos /> */}
           </section>
           <section>
             <Heading label="NEW ARRIVALS" />

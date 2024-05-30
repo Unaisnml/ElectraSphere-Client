@@ -1,25 +1,49 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/Rating";
 import Button from "../components/Button";
 import { HiOutlineHeart } from "react-icons/hi2";
-import { useGetProductDetailsQuery } from "../slices/productApiSlice";
+import {
+  useCreateReviewMutation,
+  useGetProductDetailsQuery,
+} from "../slices/productApiSlice";
 import { Loader } from "../components/Loader";
 import CountButton from "../components/CountButton";
 import { addToCart } from "../slices/cartSlice";
+import { addToWishlist } from "../slices/wishlistSlice";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import Message from "../components/Message";
+import WriteReview from "../components/CreateReview";
 
 const ProductPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const { id: productId } = useParams();
   const dispatch = useDispatch();
+  const [rating, setRating] = useState("");
   const {
     data: product,
     isLoading,
+    refetch,
     error,
   } = useGetProductDetailsQuery(productId);
 
+  const [createReview, { isLoading: loadingProductReview }] =
+    useCreateReviewMutation();
+  const submitHandler = async ({ rating, comment }) => {
+    try {
+      await createReview({
+        productId,
+        rating,
+        comment,
+      }).unwrap();
+      refetch();
+      toast.success("Review created successfully");
+    } catch (err) {
+      toast.error(err?.data?.message || err.message);
+    }
+  };
   useState(() => {
     if (product) {
       setSelectedImage(product.image[0]);
@@ -32,9 +56,13 @@ const ProductPage = () => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, count }));
-    Swal.fire("Item Added to Cart.");
+    toast.success("Item added to Cart");
   };
-  console.log("Got product.........", product);
+
+  const addToWishlistHandler = () => {
+    dispatch(addToWishlist({ ...product }));
+    toast.success("Item added to wishlish");
+  };
 
   const [count, setCount] = useState(1);
   const incrementCount = () => {
@@ -48,13 +76,13 @@ const ProductPage = () => {
   };
 
   return (
-    <section className="container mx-auto mt-20">
+    <section className="container mx-auto mt-32 pb-11">
       {isLoading ? (
         <Loader />
       ) : error ? (
         <div>{error.error}</div>
       ) : (
-        <div className=" flex  md:flex-row flex-col items-center  gap-6  py-12 mx-auto">
+        <div className=" flex  md:flex-row flex-col items-center  gap-6  py-8 mx-auto mt-10 shadow">
           <div className="w-1/2 h-auto  flex  space-y-4 items-center justify-center gap-8 overflow-hidden ">
             <div className="md:grid grid-cols-1 gap-3 overflow-hidden justify-center min-w-20 hidden">
               {product.image.map((image, index) => (
@@ -78,8 +106,8 @@ const ProductPage = () => {
             <h3 className="md:text-3xl text-xl  mb-2">{product.name}</h3>
             <div className="flex items-center justify-between leading-3 space-x-3">
               <Rating
-                value={product.ratings}
-                text={`${product.numReviews} reviews`}
+                value={product.rating}
+                text={`${product.reviews.length} reviews`}
               />
               {product.stockQuantity > 0 ? (
                 <p className="text-md text-green-500 font-medium">In Stock</p>
@@ -110,11 +138,14 @@ const ProductPage = () => {
                 stockQuantity={product.stockQuantity}
                 count={product.count}
               />
-              <button className="py-1  px-2 border md:text-3xl text-xl hover:bg-black rounded-xl hover:border-black text-black hover:text-white font-semibold border-black border-solid">
+              <button
+                onClick={addToWishlistHandler}
+                className="py-1  px-2 border md:text-3xl text-xl hover:bg-black rounded-xl hover:border-black text-black hover:text-white font-semibold border-black border-solid"
+              >
                 <HiOutlineHeart />
               </button>
             </div>
-            {product.stockQuantity <= 10 ? (
+            {product.stockQuantity <= 10 && product.stockQuantity > 0 ? (
               <span className="my-4 opacity-50">
                 Only {product.stockQuantity} items available!
               </span>
@@ -124,6 +155,32 @@ const ProductPage = () => {
           </div>
         </div>
       )}
+      <div className="my-8 py-8 w-full">
+        <h2 className="text-xl font-semibold mb-2">Reviews</h2>
+        {product && product.reviews && product.reviews.length === 0 && (
+          <Message>No Reviews</Message>
+        )}
+        {/* Write new reviews here */}
+        <WriteReview
+          submitHandler={submitHandler}
+          loadingProductReview={loadingProductReview}
+        />
+        {/* Reviews List */}
+        <div className="grid md:grid-cols-4 grid-cols-2 gap-3 mt-6 ">
+          {product && product.reviews
+            ? product.reviews.map((review) => (
+                <div
+                  key={review._id}
+                  className="flex flex-col p-4  shadow border-gray-300 bg-white rounded-lg "
+                >
+                  <p className="font-medium text-lg my-1">{review.name}</p>
+                  <Rating value={review.rating} />
+                  <p className="text-sm  max-w-64 mt-2">{review.comment}</p>
+                </div>
+              ))
+            : ""}
+        </div>
+      </div>
     </section>
   );
 };

@@ -8,12 +8,13 @@ import Button from "./Button";
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+
 import {
   decrementItemCount,
   incrementItemCount,
   removeCartItem,
 } from "../slices/cartSlice";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
 export const Cart = ({ cartItems, shippingPrice }) => {
@@ -33,7 +34,8 @@ export const Cart = ({ cartItems, shippingPrice }) => {
 
     if (confirmation.isConfirmed) {
       dispatch(removeCartItem(id));
-      Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      // Swal.fire("Deleted!", "Your item has been deleted.", "success");
+      toast.success('Your item has been deleted')
     }
   };
 
@@ -51,7 +53,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
 
   return (
     // main container
-    <section className=" flex md:flex-row flex-col gap-6 mx-auto my-10 ">
+    <section className=" flex md:flex-row flex-col gap-6 mx-auto my-10 pb-28">
       {/* Cart items container */}
 
       <div className="flex flex-col justify-between md:w-[65%] w-full h-full rounded-lg border p-6 gap-4 ">
@@ -78,8 +80,8 @@ export const Cart = ({ cartItems, shippingPrice }) => {
                   <RiDeleteBin2Line />
                 </button>
               </div>
-              <p>Size :Large</p>
-              <p>Color :Red</p>
+              {/* <p>Size :Large</p>
+              <p>Color :Red</p> */}
               {/* Container for Product price and Count button */}
               <div className="flex md:flex-row  flex-col justify-between gap-4">
                 <h4 className="md:text-xl text-sm font-bold">₹ {item.price}</h4>
@@ -114,19 +116,19 @@ export const Cart = ({ cartItems, shippingPrice }) => {
               .toFixed(2)}
           </p>
         </div>
-        <div className="flex justify-between space-x-16 md:space-x-44">
+        {/* <div className="flex justify-between space-x-16 md:space-x-44">
           <p>Discount</p>
           <p>20%</p>
-        </div>
+        </div> */}
         <div className="flex justify-between space-x-8">
           <p>Delivery Charge</p>
           <p>{shippingPrice}</p>
         </div>
-        <div className="flex justify-between space-x-8">
+        {/* <div className="flex justify-between space-x-8">
           <p>Total</p>
           <p>₹ </p>
-        </div>
-        <div className="flex justify-between space-x-4 relative">
+        </div> */}
+        {/* <div className="flex justify-between space-x-4 relative">
           <input
             type="text"
             placeholder="Add your promo code "
@@ -136,7 +138,7 @@ export const Cart = ({ cartItems, shippingPrice }) => {
           <button className="rounded-full border-none bg-black text-white font-medium text-lg px-3 py-1">
             Apply
           </button>
-        </div>
+        </div> */}
 
         <Button label=" Continue to Shipping" onClick={checkoutHandler} />
       </div>

@@ -14,6 +14,12 @@ import Swal from "sweetalert2";
 const ProductList = () => {
   const { data, isLoading, error, refetch } = useGetProductsQuery();
   const products = data;
+  const sortedProducts = data
+    ? [...products].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      )
+    : [];
+
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
   const [deleteProduct, { isLoading: loadingDelete }] =
@@ -83,17 +89,17 @@ const ProductList = () => {
           <Message variant="danger">No Products Available</Message>
         ) : (
           <>
-            {products.map((product, index) => (
+            {sortedProducts.map((product, index) => (
               <div
                 key={index}
                 className="w-full h-auto rounded-lg bg-white p-6 overflow-hidden"
               >
                 <div className="flex w-full gap-4 mb-2">
-                  <Link to="/product">
+                  <Link to="/">
                     <img
                       src={product.image[0]}
                       alt="product"
-                      className="h-32 w-auto rounded-md"
+                      className="h-20 w-32 rounded-md"
                     />
                   </Link>
                   <div className="flex  justify-between w-full gap-1">
@@ -123,11 +129,11 @@ const ProductList = () => {
                   {product.description}
                 </p>
                 <div className="flex flex-col gap-2 border p-2 rounded-md">
-                  <div className="flex justify-between">
+                  {/* <div className="flex justify-between">
                     <p className="text-sm">Sales</p>
-                    <p className="text-sm">Sales count</p>
-                  </div>
-                  <hr />
+                    <p className="text-sm">{order.count}</p>
+                  </div> */}
+                  {/* <hr /> */}
                   <div className="flex justify-between">
                     <p className="text-sm">Remaining Products</p>
                     <p className="text-sm">{product.stockQuantity}</p>

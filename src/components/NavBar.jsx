@@ -6,12 +6,24 @@ import { FaBarsStaggered, FaXmark } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlice";
+import { useSearchProductsQuery } from "../slices/productApiSlice";
 import { logout } from "../slices/authSlice";
 import AdminNav from "./AdminNav";
 
 const NavBar1 = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const { wishlistItems } = useSelector((state) => state.wishList);
   const { userInfo } = useSelector((state) => state.auth);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: searchResults = [] } = useSearchProductsQuery(searchQuery, {
+    skip: searchQuery.length < 2,
+  });
+
+  const handleSearchChange = (event) => {
+    console.log("value", event.target.value);
+    setSearchQuery(event.target.value);
+  };
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
@@ -19,20 +31,25 @@ const NavBar1 = () => {
   };
 
   const [isOpen, setIsOpen] = useState(false);
-
-  // const handleButtonClick = () => {
-  //   setIsOpen(!isOpen);
-  // };
+  const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
 
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
 
   const handleButtonClick = () => {
     setIsOpen(!isOpen);
   };
 
   const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      searchRef.current &&
+      !searchRef.current.contains(event.target)
+    ) {
       setIsOpen(false);
+      // setSearchQuery("");
+      setIsSearchDropdownOpen(false);
     }
   };
 
@@ -42,6 +59,13 @@ const NavBar1 = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    if (searchQuery.length >= 2) {
+      setIsSearchDropdownOpen(true);
+    } else {
+      setIsSearchDropdownOpen(false);
+    }
+  }, [searchQuery]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -91,13 +115,33 @@ const NavBar1 = () => {
           )}
 
           <div className="flex justify-center items-center gap-10 md:gap-6 text-2xl text-black max-lg:gap-3">
-            <div className="relative max-lg:hidden ">
+            <div className="relative max-lg:hidden " ref={searchRef}>
               <input
-                className=" border-none focus:outline-none bg-gray-200 text-base rounded-xl px-2 py-1 pl-8  "
+                className=" border-none focus:outline-none bg-blue-100 text-base rounded-xl px-2 py-1 pl-8  "
                 type="text"
                 placeholder="Search for Products..."
+                value={searchQuery}
+                onChange={handleSearchChange}
               />
-              <FaSearch className="absolute  left-2 top-1/2 text-base transform -translate-y-1/2 text-gray-300 " />
+              <FaSearch className="absolute  left-2 top-1/2 text-base transform -translate-y-1/2 text-gray-400 " />
+              {isSearchDropdownOpen && searchResults.length > 0 && (
+                <ul className="absolute bg-white shadow-lg text-base rounded w-full mt-1 max-h-40 overflow-y-auto z-10">
+                  {searchResults.map((product) => (
+                    <li
+                      key={product._id}
+                      className="p-1  hover:bg-blue-100 flex items-center lowercase gap-1"
+                    >
+                      <img src={product.image[0]} alt="" className="w-5 h-5" />
+                      <Link
+                        to={`/products/${product._id}`}
+                        onClick={() => setSearchQuery("")}
+                      >
+                        {product.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             {!userInfo?.isAdmin && (
@@ -105,15 +149,14 @@ const NavBar1 = () => {
                 <Link to="/cart" className="relative">
                   <FaShoppingCart />
                   {cartItems.length > 0 && (
-                    <span className="count-div w-24">
-                      {/* {cartItems.reduce((a, c) => a + c.count, 0)} */}
-                      {cartItems.length}
-                    </span>
+                    <span className="count-div w-24">{cartItems.length}</span>
                   )}
                 </Link>
-                <Link to="/whishlist" className="relative">
+                <Link to="/wishList" className="relative">
                   <FaHeart />
-                  <span className="count-div">0</span>
+                  {wishlistItems.length > 0 && (
+                    <span className="count-div">{wishlistItems.length}</span>
+                  )}
                 </Link>
               </>
             )}
@@ -201,16 +244,18 @@ const NavBar1 = () => {
             </div>
 
             {/* Hamburger mernu*/}
-            <button
-              className="hidden focus:outline-none focus:text-gray-500 max-lg:block"
-              onClick={toggleMenu}
-            >
-              {isMenuOpen ? (
-                <FaXmark className="text-xl" />
-              ) : (
-                <FaBarsStaggered className="text-xl" />
-              )}
-            </button>
+            {!userInfo?.isAdmin && (
+              <button
+                className="hidden focus:outline-none focus:text-gray-500 max-lg:block"
+                onClick={toggleMenu}
+              >
+                {isMenuOpen ? (
+                  <FaXmark className="text-xl" />
+                ) : (
+                  <FaBarsStaggered className="text-xl" />
+                )}
+              </button>
+            )}
           </div>
           <div
             className={`gap-4 px-4  py-4 z-20 bg-gray-700 flex flex-col ${
@@ -238,8 +283,28 @@ const NavBar1 = () => {
             className="focus:outline-none border-none w-full mt-1 bg-gray-200 rounded-xl px-2 py-1/2 pl-8 "
             type="text"
             placeholder="Search for Products..."
+            value={searchQuery}
+            onChange={handleSearchChange}
           />
           <FaSearch className="absolute left-2 top-2/4 transform -translate-y-2/4 text-gray-300 " />
+          {searchResults.length > 0 && (
+            <ul className="absolute bg-white shadow-lg text-base rounded w-full mt-1 max-h-40 overflow-y-auto z-10">
+              {searchResults.map((product) => (
+                <li
+                  key={product._id}
+                  className="p-1  hover:bg-blue-100 flex items-center lowercase gap-1"
+                >
+                  <img src={product.image[0]} alt="" className="w-5 h-5" />
+                  <Link
+                    to={`/products/${product._id}`}
+                    onClick={() => setSearchQuery("")}
+                  >
+                    {product.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </header>
     </section>

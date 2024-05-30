@@ -6,15 +6,27 @@ import { useGetOrdersQuery } from "../slices/orderApiSlice";
 import { useGetUsersQuery } from "../slices/usersApiSlice";
 
 const Dashboard = () => {
-  const { data: orders, refetch, isLoading: isLoadingOrders, error: errorOrders } = useGetOrdersQuery();
-  const { data: users,  isLoading: isLoadingUsers, error: errorUsers } = useGetUsersQuery();
+  const {
+    data: orders,
+    refetch,
+    isLoading: isLoadingOrders,
+    error: errorOrders,
+  } = useGetOrdersQuery();
+  const {
+    data: users,
+    isLoading: isLoadingUsers,
+    error: errorUsers,
+  } = useGetUsersQuery();
   const nonAdminUsers = users ? users.filter((user) => !user.isAdmin) : [];
   const nonAdminUsersCount = nonAdminUsers.length;
-  const totalOrderPrice = orders ? orders.reduce((total, order) => total + order.totalPrice, 0) : 0;
+  const totalOrderPrice = orders
+    ? orders.reduce((total, order) => total + order.totalPrice, 0)
+    : 0;
   const activeOrders = orders
-  ? orders.filter((order) => !order.isDelivered)
-           .reduce((total, order) => total + order.totalPrice, 0)
-  : 0;
+    ? orders
+        .filter((order) => !order.isDelivered)
+        .reduce((total, order) => total + order.totalPrice, 0)
+    : 0;
   return (
     <section className="w-full mx-auto pr-5">
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 w-full mb-4 ">
@@ -27,7 +39,9 @@ const Dashboard = () => {
               <button className="py-2 px-2 text-2xl bg-blue-900 text-white rounded-md">
                 <IoBagHandleOutline />
               </button>{" "}
-              <h2 className="text-md text-blue-900 font-semibold mb-2">₹ {Math.round(totalOrderPrice)}</h2>
+              <h2 className="text-md text-blue-900 font-semibold mb-2">
+                ₹ {Math.round(totalOrderPrice)}
+              </h2>
             </div>
           </div>
         </div>
@@ -40,7 +54,9 @@ const Dashboard = () => {
               <button className="py-2 px-2 text-2xl bg-blue-900 text-white rounded-md">
                 <IoBagHandleOutline />
               </button>{" "}
-              <h2 className="text-md text-violet-900 font-semibold mb-2">₹ {Math.round(activeOrders)}</h2>
+              <h2 className="text-md text-violet-900 font-semibold mb-2">
+                ₹ {Math.round(activeOrders)}
+              </h2>
             </div>
           </div>
         </div>
@@ -51,7 +67,9 @@ const Dashboard = () => {
               <button className="py-2 px-2 text-2xl bg-blue-900 text-white rounded-md">
                 <FaUsers />
               </button>{" "}
-              <h2 className="text-md text-pink-900 font-semibold mb-2">{nonAdminUsersCount}</h2>
+              <h2 className="text-md text-pink-900 font-semibold mb-2">
+                {nonAdminUsersCount}
+              </h2>
             </div>
           </div>
         </div>
